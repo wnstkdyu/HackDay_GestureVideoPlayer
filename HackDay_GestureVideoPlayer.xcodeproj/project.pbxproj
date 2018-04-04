@@ -8,11 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		7D1053F6207382D100880FF2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1053F5207382D100880FF2 /* AppDelegate.swift */; };
-		7D1053F8207382D100880FF2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1053F7207382D100880FF2 /* ViewController.swift */; };
 		7D1053FB207382D100880FF2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D1053F9207382D100880FF2 /* Main.storyboard */; };
 		7D1053FD207382D100880FF2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D1053FC207382D100880FF2 /* Assets.xcassets */; };
 		7D105400207382D100880FF2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D1053FE207382D100880FF2 /* LaunchScreen.storyboard */; };
-		7D1054082073A7ED00880FF2 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1054072073A7ED00880FF2 /* PlayerView.swift */; };
 		7D10540C20748F2200880FF2 /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D10540B20748F2200880FF2 /* VideoListViewController.swift */; };
 		7D10540E20748F6E00880FF2 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D10540D20748F6E00880FF2 /* PlayerViewController.swift */; };
 		7D1054112074A12E00880FF2 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1054102074A12E00880FF2 /* Extension.swift */; };
@@ -21,12 +19,10 @@
 /* Begin PBXFileReference section */
 		7D1053F2207382D100880FF2 /* HackDay_GestureVideoPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackDay_GestureVideoPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1053F5207382D100880FF2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7D1053F7207382D100880FF2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7D1053FA207382D100880FF2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7D1053FC207382D100880FF2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7D1053FF207382D100880FF2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D105401207382D100880FF2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7D1054072073A7ED00880FF2 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		7D10540B20748F2200880FF2 /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
 		7D10540D20748F6E00880FF2 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		7D1054102074A12E00880FF2 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -77,7 +73,6 @@
 		7D1054092073A80500880FF2 /* View Controller */ = {
 			isa = PBXGroup;
 			children = (
-				7D1053F7207382D100880FF2 /* ViewController.swift */,
 				7D10540B20748F2200880FF2 /* VideoListViewController.swift */,
 				7D10540D20748F6E00880FF2 /* PlayerViewController.swift */,
 			);
@@ -87,7 +82,6 @@
 		7D10540A2073A81300880FF2 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7D1054072073A7ED00880FF2 /* PlayerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -177,8 +171,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D1054082073A7ED00880FF2 /* PlayerView.swift in Sources */,
-				7D1053F8207382D100880FF2 /* ViewController.swift in Sources */,
 				7D10540C20748F2200880FF2 /* VideoListViewController.swift in Sources */,
 				7D1054112074A12E00880FF2 /* Extension.swift in Sources */,
 				7D1053F6207382D100880FF2 /* AppDelegate.swift in Sources */,

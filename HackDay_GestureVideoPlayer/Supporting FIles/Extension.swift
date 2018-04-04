@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreMedia
+import AVFoundation
 
 extension CMTime {
     var toTimeForamt: String {
@@ -19,6 +20,16 @@ extension CMTime {
             return String(format: "%i:%02i:%02i", hours, minutes, seconds)
         } else {
             return String(format: "%02i:%02i", minutes, seconds)
+        }
+    }
+}
+
+extension AVPlayer {
+    var isPlaying: Bool {
+        if self.rate > 0.0 {
+            return true
+        } else {
+            return false
         }
     }
 }
