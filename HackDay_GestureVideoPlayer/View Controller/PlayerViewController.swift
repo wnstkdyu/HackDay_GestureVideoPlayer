@@ -19,11 +19,20 @@ class PlayerViewController: UIViewController {
     
     @IBOutlet weak var playerView: UIView!
     @IBOutlet var outletCollection: [AnyObject]!
+    @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var lockButton: UIButton!
     @IBOutlet weak var timeSlider: UISlider!
     @IBOutlet weak var currentTimeLabel: UILabel!
     @IBOutlet weak var totalTimeLabel: UILabel!
     @IBOutlet weak var qualityLabel: UILabel!
+    
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.frame = CGRect(origin: playerView.center, size: CGSize(width: 40, height: 40))
+        
+        return activityIndicator
+    }()
     
     var videoURL: URL?
     private var player: AVPlayer?
@@ -37,22 +46,26 @@ class PlayerViewController: UIViewController {
     private var isSeekInProgress: Bool = false
     
     private var isFirstPlaying: Bool = true
+    private var isLocked: Bool = false
     
+    // 화면 회전관련 변수 오버라이드
     override var shouldAutorotate: Bool {
         return true
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        changeToLandscapeLeft()
-        
-        navigationController?.isNavigationBarHidden = true
-        navigationController?.navigationItem.backBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(ss))
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return [.landscape]
     }
     
-    @objc func ss() {
-        print("back")
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        hideUI()
+        changeToLandscape()
     }
     
     // 화면 크기가 다 결정되고 나서 해야 비디오가 꽉 차게 나옴.
@@ -86,7 +99,9 @@ class PlayerViewController: UIViewController {
             case .readyToPlay:
                 guard isFirstPlaying else { return }
                 
+                showUI()
                 play()
+                
                 isFirstPlaying = false
             case .failed:
                 print("PlayerItem failed.")
@@ -94,6 +109,10 @@ class PlayerViewController: UIViewController {
                 print("PlayerItem is not yet ready.")
             }
         }
+    }
+    
+    @IBAction func backButtonTapped(_ sender: UIButton) {
+        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func playButtonTapped(_ sender: UIButton) {
@@ -131,13 +150,62 @@ class PlayerViewController: UIViewController {
         let currentTimeSeconds = Double(valueRatio) * totalSeconds
         let timeToBeChanged = CMTime(seconds: currentTimeSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         
-//        player?.seek(to: timeToBeChanged, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
         stopPlayingAndSeekSmoothlyToTime(newChaseTime: timeToBeChanged)
     }
     
-    private func changeToLandscapeLeft() {
-        let orientationValue = UIInterfaceOrientationMask.landscapeLeft.rawValue
-        UIDevice.current.setValue(orientationValue, forKey: "orientation")
+    @IBAction func handleTapGesture(_ sender: UITapGestureRecognizer) {
+        
+    }
+    
+    @IBAction func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+        
+    }
+    
+    private func changeToLandscape() {
+        switch UIDevice.current.orientation {
+        case .landscapeLeft,
+             .landscapeRight:
+            return
+        default:
+            let orientationValue = UIDeviceOrientation.landscapeRight.rawValue
+            UIDevice.current.setValue(orientationValue, forKey: "orientation")
+        }
+    }
+    
+    private func hideUI() {
+        outletCollection.filter { ($0 as? UIView) != backButton}
+            .forEach { ($0 as? UIView)?.isHidden = true }
+        showActivityIndicator()
+    }
+    
+    private func showUI() {
+        outletCollection.filter { ($0 as? UIView) != backButton}
+            .forEach { ($0 as? UIView)?.isHidden = false }
+        hideActivityIndicator()
+    }
+    
+    private func showActivityIndicator() {
+        guard !activityIndicator.isDescendant(of: self.playerView) else {
+            activityIndicator.startAnimating()
+            
+            return
+        }
+        
+        self.playerView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+    }
+    
+    private func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
+    }
+    
+    func setPlayerUI(asset: AVAsset) {
+        totalTimeLabel.text = asset.duration.toTimeForamt
+        if asset.duration.seconds / 3600 > 0 {
+            currentTimeLabel.text = "00:00:00"
+        } else {
+            currentTimeLabel.text = "00:00"
+        }
     }
     
     private func prepareToPlay() {
@@ -164,21 +232,8 @@ class PlayerViewController: UIViewController {
         addPeriodicTimeObserver()
     }
     
-    private func setPlayerUI(asset: AVAsset) {
-        totalTimeLabel.text = asset.duration.toTimeForamt
-        if asset.duration.seconds / 3600 > 0 {
-            currentTimeLabel.text = "00:00:00"
-        } else {
-            currentTimeLabel.text = "00:00"
-        }
-    }
-    
     private func setLockUI(isLocked: Bool) {
-        outletCollection.forEach { outlet in
-            UIView.animate(withDuration: 0.5) {
-                (outlet as? UIView)?.alpha = isLocked ? 0.0 : 1.0
-            }
-        }
+        self.isLocked = isLocked
     }
     
     private func addPeriodicTimeObserver() {
@@ -270,5 +325,14 @@ class PlayerViewController: UIViewController {
                             self?.pause()
                         }
         }
+    }
+}
+
+extension PlayerViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        
+        guard let touchView = touch.view,
+            touchView.isDescendant(of: view) else { return false }
+        return true
     }
 }

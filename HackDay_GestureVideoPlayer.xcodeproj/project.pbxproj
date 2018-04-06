@@ -14,6 +14,7 @@
 		7D10540C20748F2200880FF2 /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D10540B20748F2200880FF2 /* VideoListViewController.swift */; };
 		7D10540E20748F6E00880FF2 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D10540D20748F6E00880FF2 /* PlayerViewController.swift */; };
 		7D1054112074A12E00880FF2 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1054102074A12E00880FF2 /* Extension.swift */; };
+		7D3E97352077148800F42484 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3E97342077148800F42484 /* NavigationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		7D10540B20748F2200880FF2 /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
 		7D10540D20748F6E00880FF2 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		7D1054102074A12E00880FF2 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		7D3E97342077148800F42484 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +75,7 @@
 		7D1054092073A80500880FF2 /* View Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7D3E97342077148800F42484 /* NavigationController.swift */,
 				7D10540B20748F2200880FF2 /* VideoListViewController.swift */,
 				7D10540D20748F6E00880FF2 /* PlayerViewController.swift */,
 			);
@@ -173,6 +176,7 @@
 			files = (
 				7D10540C20748F2200880FF2 /* VideoListViewController.swift in Sources */,
 				7D1054112074A12E00880FF2 /* Extension.swift in Sources */,
+				7D3E97352077148800F42484 /* NavigationController.swift in Sources */,
 				7D1053F6207382D100880FF2 /* AppDelegate.swift in Sources */,
 				7D10540E20748F6E00880FF2 /* PlayerViewController.swift in Sources */,
 			);
