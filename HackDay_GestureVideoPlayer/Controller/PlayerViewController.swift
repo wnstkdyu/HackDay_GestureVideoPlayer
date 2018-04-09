@@ -27,6 +27,8 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var totalTimeLabel: UILabel!
     @IBOutlet weak var qualityLabel: UILabel!
     
+    @IBOutlet weak var centerTimeLabel: UILabel!
+    
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
         activityIndicator.frame = CGRect(origin: playerView.center, size: CGSize(width: 40, height: 40))
@@ -49,6 +51,10 @@ class PlayerViewController: UIViewController {
     private var isVisible: Bool = true
     private var isLocked: Bool = false
     private var workItemArray: [DispatchWorkItem] = []
+    
+    private var newCMTime: CMTime?
+    private var newBrightness: Double?
+    private var newVolume: Double?
     
     // 화면 회전관련 변수 오버라이드
     override var shouldAutorotate: Bool {
@@ -166,7 +172,56 @@ class PlayerViewController: UIViewController {
     }
     
     @IBAction func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        
+        let touchPoint = sender.location(in: playerView)
+        print("touchPoint: \(touchPoint)")
+        switch sender.state {
+        case .began:
+            centerTimeLabel.isHidden = false
+        case .changed:
+            let translation = sender.translation(in: playerView)
+            if translation.x != 0 {
+                // 좌우로 움직임
+                let ratio = Double(translation.x / playerView.frame.width)
+                
+                guard let currentTimeSeconds = player?.currentTime().seconds,
+                    let assetDuration = player?.currentItem?.duration.seconds else { return }
+                var newSeconds = currentTimeSeconds + assetDuration * ratio
+                if newSeconds > assetDuration {
+                    newSeconds = assetDuration
+                }
+                newCMTime  = CMTime(seconds: newSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+                centerTimeLabel.text = newCMTime?.toTimeForamt
+            } else {
+                // 상하로 움직임 -> 화면을 반으로 갈라 왼쪽은 밝기, 오른쪽은 볼륨 조절
+            }
+        case .ended:
+            if let newCMTime = newCMTime {
+                player?.seek(to: newCMTime,
+                             toleranceBefore: kCMTimeZero,
+                             toleranceAfter: kCMTimeZero) { [weak self] _ in
+                                guard let isPlaying = self?.player?.isPlaying else { return }
+                                switch isPlaying {
+                                case true:
+                                    self?.play()
+                                case false:
+                                    self?.pause()
+                                }
+                }
+            } else if let newBrightness = newBrightness {
+                
+            } else if let newVolume = newVolume {
+                
+            }
+            
+            newCMTime = nil
+            newBrightness = nil
+            newVolume = nil
+            
+            centerTimeLabel.text = nil
+            centerTimeLabel.isHidden = true
+        default:
+            break
+        }
     }
     
     private func changeToLandscape() {
@@ -362,7 +417,8 @@ class PlayerViewController: UIViewController {
         isSeekInProgress = true
         let seekTimeInProgress = chaseTime
         player?.seek(to: seekTimeInProgress,
-                     toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero) { [weak self] isFinished in
+                     toleranceBefore: kCMTimeZero,
+                     toleranceAfter: kCMTimeZero) { [weak self] isFinished in
                         guard let strongSelf = self else { return }
                         if CMTimeCompare(seekTimeInProgress, strongSelf.chaseTime) == 0 {
                             strongSelf.isSeekInProgress = false
@@ -387,5 +443,9 @@ extension PlayerViewController: UIGestureRecognizerDelegate {
         guard let touchView = touch.view,
             touchView.isDescendant(of: view) else { return false }
         return true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }

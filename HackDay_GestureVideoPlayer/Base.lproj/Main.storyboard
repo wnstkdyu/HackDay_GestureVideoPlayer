@@ -129,7 +129,7 @@
                                     <action selector="lockButtonTapped:" destination="dS9-yh-DjW" eventType="touchUpInside" id="rqJ-S7-kRF"/>
                                 </connections>
                             </button>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="LQL-j5-1pA">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LQL-j5-1pA">
                                 <rect key="frame" x="18" y="622" width="175" height="31"/>
                                 <color key="tintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -159,11 +159,18 @@
                                     </label>
                                 </subviews>
                             </stackView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BQj-Bb-gFp">
+                                <rect key="frame" x="187.5" y="334" width="0.0" height="0.0"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                <color key="textColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="fKa-fm-WWY" firstAttribute="leading" secondItem="Y9M-Yx-YEx" secondAttribute="trailing" constant="8" symbolic="YES" id="0jf-94-xQO"/>
+                            <constraint firstItem="BQj-Bb-gFp" firstAttribute="centerX" secondItem="JPM-Ya-nZH" secondAttribute="centerX" id="3YU-Im-3Fv"/>
                             <constraint firstItem="Y9M-Yx-YEx" firstAttribute="centerY" secondItem="JPM-Ya-nZH" secondAttribute="centerY" id="5so-CM-JDg"/>
                             <constraint firstItem="5sU-uA-6og" firstAttribute="leading" secondItem="A0L-Hw-WBm" secondAttribute="trailing" constant="20" id="DKD-rH-OCZ"/>
                             <constraint firstItem="bvZ-iw-8On" firstAttribute="centerY" secondItem="Y9M-Yx-YEx" secondAttribute="centerY" id="FlX-se-gwv"/>
@@ -175,6 +182,7 @@
                             <constraint firstItem="A0L-Hw-WBm" firstAttribute="leading" secondItem="LQL-j5-1pA" secondAttribute="trailing" constant="20" id="ctt-0V-B7q"/>
                             <constraint firstItem="rHd-oa-YF0" firstAttribute="trailing" secondItem="bvZ-iw-8On" secondAttribute="trailing" constant="40" id="eUE-3j-84o"/>
                             <constraint firstItem="fOW-5t-nlC" firstAttribute="top" secondItem="rHd-oa-YF0" secondAttribute="top" constant="4" id="fnl-Ig-zQR"/>
+                            <constraint firstItem="BQj-Bb-gFp" firstAttribute="centerY" secondItem="JPM-Ya-nZH" secondAttribute="centerY" id="isU-FU-JUE"/>
                             <constraint firstAttribute="bottom" secondItem="mrN-uq-EQI" secondAttribute="bottom" id="jdy-aU-4od"/>
                             <constraint firstItem="Y9M-Yx-YEx" firstAttribute="leading" secondItem="7nt-Ff-rn0" secondAttribute="trailing" constant="8" symbolic="YES" id="kqX-ST-4br"/>
                             <constraint firstItem="fKa-fm-WWY" firstAttribute="centerY" secondItem="7nt-Ff-rn0" secondAttribute="centerY" id="mS7-bj-Ap4"/>
@@ -189,6 +197,7 @@
                     </view>
                     <connections>
                         <outlet property="backButton" destination="fOW-5t-nlC" id="vaJ-8w-u4G"/>
+                        <outlet property="centerTimeLabel" destination="BQj-Bb-gFp" id="JWE-7r-eWo"/>
                         <outlet property="currentTimeLabel" destination="4lm-98-T9K" id="mAA-qd-oNF"/>
                         <outlet property="lockButton" destination="bvZ-iw-8On" id="uFu-fp-id4"/>
                         <outlet property="playButton" destination="Y9M-Yx-YEx" id="Zgb-hO-69K"/>
