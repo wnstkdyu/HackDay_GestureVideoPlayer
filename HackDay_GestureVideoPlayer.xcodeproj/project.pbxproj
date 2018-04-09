@@ -16,6 +16,7 @@
 		7D1054112074A12E00880FF2 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D1054102074A12E00880FF2 /* Extension.swift */; };
 		7D3E97352077148800F42484 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3E97342077148800F42484 /* NavigationController.swift */; };
 		7D3E97392077EC1300F42484 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3E97382077EC1300F42484 /* PlayerView.swift */; };
+		7D3E973C207B596100F42484 /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3E973B207B596100F42484 /* VideoModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		7D1054102074A12E00880FF2 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		7D3E97342077148800F42484 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		7D3E97382077EC1300F42484 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		7D3E973B207B596100F42484 /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,8 +65,9 @@
 			isa = PBXGroup;
 			children = (
 				7D1053F5207382D100880FF2 /* AppDelegate.swift */,
-				7D1054092073A80500880FF2 /* View Controller */,
+				7D3E973A207B595000F42484 /* Model */,
 				7D10540A2073A81300880FF2 /* View */,
+				7D1054092073A80500880FF2 /* Controller */,
 				7D10540F2074A11D00880FF2 /* Supporting FIles */,
 				7D1053F9207382D100880FF2 /* Main.storyboard */,
 				7D1053FC207382D100880FF2 /* Assets.xcassets */,
@@ -74,14 +77,14 @@
 			path = HackDay_GestureVideoPlayer;
 			sourceTree = "<group>";
 		};
-		7D1054092073A80500880FF2 /* View Controller */ = {
+		7D1054092073A80500880FF2 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				7D3E97342077148800F42484 /* NavigationController.swift */,
 				7D10540B20748F2200880FF2 /* VideoListViewController.swift */,
 				7D10540D20748F6E00880FF2 /* PlayerViewController.swift */,
 			);
-			path = "View Controller";
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		7D10540A2073A81300880FF2 /* View */ = {
@@ -98,6 +101,14 @@
 				7D1054102074A12E00880FF2 /* Extension.swift */,
 			);
 			path = "Supporting FIles";
+			sourceTree = "<group>";
+		};
+		7D3E973A207B595000F42484 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7D3E973B207B596100F42484 /* VideoModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,6 +191,7 @@
 				7D10540C20748F2200880FF2 /* VideoListViewController.swift in Sources */,
 				7D1054112074A12E00880FF2 /* Extension.swift in Sources */,
 				7D3E97352077148800F42484 /* NavigationController.swift in Sources */,
+				7D3E973C207B596100F42484 /* VideoModel.swift in Sources */,
 				7D3E97392077EC1300F42484 /* PlayerView.swift in Sources */,
 				7D1053F6207382D100880FF2 /* AppDelegate.swift in Sources */,
 				7D10540E20748F6E00880FF2 /* PlayerViewController.swift in Sources */,
