@@ -18,7 +18,7 @@ enum Direction {
 class PlayerViewController: UIViewController {
     
     @IBOutlet weak var playerView: UIView!
-    @IBOutlet var outletCollection: [AnyObject]!
+    @IBOutlet var outletCollection: [UIView]!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var lockButton: UIButton!
@@ -46,7 +46,9 @@ class PlayerViewController: UIViewController {
     private var isSeekInProgress: Bool = false
     
     private var isFirstPlaying: Bool = true
+    private var isVisible: Bool = true
     private var isLocked: Bool = false
+    private var workItemArray: [DispatchWorkItem] = []
     
     // 화면 회전관련 변수 오버라이드
     override var shouldAutorotate: Bool {
@@ -98,7 +100,7 @@ class PlayerViewController: UIViewController {
             switch playerItemStatus {
             case .readyToPlay:
                 guard isFirstPlaying else { return }
-                
+
                 showUI()
                 play()
                 
@@ -154,7 +156,13 @@ class PlayerViewController: UIViewController {
     }
     
     @IBAction func handleTapGesture(_ sender: UITapGestureRecognizer) {
+        workItemArray.forEach { $0.cancel() }
         
+        if isVisible {
+            fadeOutUI()
+        } else {
+            fadeInUI()
+        }
     }
     
     @IBAction func handlePanGesture(_ sender: UIPanGestureRecognizer) {
@@ -162,26 +170,29 @@ class PlayerViewController: UIViewController {
     }
     
     private func changeToLandscape() {
-        switch UIDevice.current.orientation {
-        case .landscapeLeft,
-             .landscapeRight:
-            return
-        default:
             let orientationValue = UIDeviceOrientation.landscapeRight.rawValue
             UIDevice.current.setValue(orientationValue, forKey: "orientation")
+    }
+    
+    private func setPlayerUI(asset: AVAsset) {
+        totalTimeLabel.text = asset.duration.toTimeForamt
+        if asset.duration.seconds / 3600 > 0 {
+            currentTimeLabel.text = "00:00:00"
+        } else {
+            currentTimeLabel.text = "00:00"
         }
     }
     
-    private func hideUI() {
-        outletCollection.filter { ($0 as? UIView) != backButton}
-            .forEach { ($0 as? UIView)?.isHidden = true }
-        showActivityIndicator()
+    private func showUI() {
+        outletCollection.filter { $0 != backButton}
+            .forEach { $0.isHidden = false }
+        hideActivityIndicator()
     }
     
-    private func showUI() {
-        outletCollection.filter { ($0 as? UIView) != backButton}
-            .forEach { ($0 as? UIView)?.isHidden = false }
-        hideActivityIndicator()
+    private func hideUI() {
+        outletCollection.filter { $0 != backButton }
+            .forEach { $0.isHidden = true }
+        showActivityIndicator()
     }
     
     private func showActivityIndicator() {
@@ -199,13 +210,43 @@ class PlayerViewController: UIViewController {
         activityIndicator.stopAnimating()
     }
     
-    func setPlayerUI(asset: AVAsset) {
-        totalTimeLabel.text = asset.duration.toTimeForamt
-        if asset.duration.seconds / 3600 > 0 {
-            currentTimeLabel.text = "00:00:00"
-        } else {
-            currentTimeLabel.text = "00:00"
+    private func fadeInUI(isLocked: Bool = false) {
+        outletCollection.filter { isLocked ? $0 == lockButton : true }
+            .forEach { outlet in
+                UIView.animate(withDuration: 1.0,
+                               delay: 0.0,
+                               options: [.curveEaseInOut, .allowUserInteraction, .beginFromCurrentState],
+                               animations: {
+                                outlet.alpha = 1.0
+                }, completion: { [weak self] _ in
+                    guard outlet == self?.outletCollection.last else { return }
+                    self?.isVisible = true
+                    
+                    let workItem = DispatchWorkItem {
+                        self?.fadeOutUI()
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+                })
         }
+    }
+    
+    @objc private func fadeOutUI(delay: Double = 0.0, isLocked: Bool = false) {
+        outletCollection.filter { isLocked ? $0 == lockButton : true }
+            .forEach { outlet in
+                UIView.animate(withDuration: 1.0,
+                               delay: delay,
+                               options: [.curveEaseInOut, .allowUserInteraction, .beginFromCurrentState],
+                               animations: {
+                                outlet.alpha = 0.0
+                }, completion: { [weak self] _ in
+                    guard outlet == self?.outletCollection.last else { return }
+                    self?.isVisible = false
+                })
+        }
+    }
+    
+    private func setLockUI(isLocked: Bool) {
+        self.isLocked = isLocked
     }
     
     private func prepareToPlay() {
@@ -232,10 +273,6 @@ class PlayerViewController: UIViewController {
         addPeriodicTimeObserver()
     }
     
-    private func setLockUI(isLocked: Bool) {
-        self.isLocked = isLocked
-    }
-    
     private func addPeriodicTimeObserver() {
         let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         
@@ -259,12 +296,29 @@ class PlayerViewController: UIViewController {
         playButton.isSelected = true
         
         player?.play()
+        
+        guard isVisible else { return }
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.fadeOutUI()
+        }
+        workItemArray.append(workItem)
+        workItem.notify(queue: .main) {
+            
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
     }
     
     private func pause() {
         playButton.isSelected = false
         
         player?.pause()
+        
+        guard isVisible else { return }
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.fadeOutUI()
+        }
+        workItemArray.append(workItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
     }
     
     private func changeTenSeconds(to direction: Direction) {
