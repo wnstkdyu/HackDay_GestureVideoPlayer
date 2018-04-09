@@ -36,6 +36,14 @@ class PlayerViewController: UIViewController {
         return activityIndicator
     }()
     
+    private lazy var expandingView: UIView = {
+        let expandingView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: playerView.frame.width / 2, height: playerView.frame.height)))
+        expandingView.backgroundColor = currentTimeLabel.textColor
+        expandingView.alpha = 0.5
+        
+        return expandingView
+    }()
+    
     var asset: AVAsset?
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
@@ -53,8 +61,8 @@ class PlayerViewController: UIViewController {
     private var workItemArray: [DispatchWorkItem] = []
     
     private var newCMTime: CMTime?
-    private var newBrightness: Double?
-    private var newVolume: Double?
+    private var firstBrightness: CGFloat?
+    private var firstVolume: Float?
     
     // 화면 회전관련 변수 오버라이드
     override var shouldAutorotate: Bool {
@@ -172,16 +180,21 @@ class PlayerViewController: UIViewController {
     }
     
     @IBAction func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        let touchPoint = sender.location(in: playerView)
-        print("touchPoint: \(touchPoint)")
         switch sender.state {
         case .began:
             centerTimeLabel.isHidden = false
+            firstBrightness = UIScreen.main.brightness
+            firstVolume = player?.volume
+            
+            view.addSubview(expandingView)
         case .changed:
             let translation = sender.translation(in: playerView)
-            if translation.x != 0 {
+            let xRatio = translation.x / playerView.frame.width
+            let yRatio = translation.y / playerView.frame.height
+            
+            if abs(xRatio) > abs(yRatio) {
                 // 좌우로 움직임
-                let ratio = Double(translation.x / playerView.frame.width)
+                let ratio = Double(xRatio)
                 
                 guard let currentTimeSeconds = player?.currentTime().seconds,
                     let assetDuration = player?.currentItem?.duration.seconds else { return }
@@ -193,6 +206,22 @@ class PlayerViewController: UIViewController {
                 centerTimeLabel.text = newCMTime?.toTimeForamt
             } else {
                 // 상하로 움직임 -> 화면을 반으로 갈라 왼쪽은 밝기, 오른쪽은 볼륨 조절
+                if sender.location(in: playerView).x <= playerView.frame.width / 2 {
+                    // 왼쪽: 밝기
+                    guard let firstBrightness = firstBrightness else { return }
+                    UIScreen.main.brightness = CGFloat(firstBrightness) - yRatio
+                    
+                    expandingView.frame.origin = CGPoint(x: 0, y: playerView.frame.height * (1 - UIScreen.main.brightness))
+                } else {
+                    // 오른쪽: 볼륨
+                    guard let firstVolume = firstVolume else { return }
+                    player?.volume = firstVolume - Float(yRatio)
+                    
+                    expandingView.frame.origin = CGPoint(x: playerView.frame.width / 2, y: playerView.frame.height * CGFloat(1 - (firstVolume - Float(yRatio))))
+                    if expandingView.frame.origin.y < 0 {
+                        expandingView.frame.origin.y = 0
+                    }
+                }
             }
         case .ended:
             if let newCMTime = newCMTime {
@@ -207,18 +236,16 @@ class PlayerViewController: UIViewController {
                                     self?.pause()
                                 }
                 }
-            } else if let newBrightness = newBrightness {
-                
-            } else if let newVolume = newVolume {
-                
             }
-            
             newCMTime = nil
-            newBrightness = nil
-            newVolume = nil
+            firstBrightness = nil
+            firstVolume = nil
             
             centerTimeLabel.text = nil
             centerTimeLabel.isHidden = true
+            
+            expandingView.frame.origin = CGPoint(x: 0, y: playerView.frame.maxY)
+            expandingView.removeFromSuperview()
         default:
             break
         }
