@@ -22,21 +22,40 @@
                                 <rect key="frame" x="0.0" y="64" width="374" height="538"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TZs-uO-Tvt">
-                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="itemSize" width="212" height="196"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoCollectionViewCell" id="59z-En-si7">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoListCell" id="59z-En-si7" customClass="VideoListCell" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target">
+                                        <rect key="frame" x="81" y="0.0" width="212" height="196"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="212" height="196"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lDb-hp-X6w">
+                                                    <rect key="frame" x="85" y="87.5" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="lDb-hp-X6w" firstAttribute="centerX" secondItem="59z-En-si7" secondAttribute="centerX" id="0NB-1H-ns7"/>
+                                            <constraint firstItem="lDb-hp-X6w" firstAttribute="centerY" secondItem="59z-En-si7" secondAttribute="centerY" id="tuF-HH-Eux"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="videoLabel" destination="lDb-hp-X6w" id="ojf-lQ-tCH"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="BQY-AV-Fj1"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="z9G-c0-qnQ"/>
+                                </connections>
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -55,12 +74,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="133.5832083958021" y="18.399999999999999"/>
+            <point key="canvasLocation" x="132" y="17.541229385307346"/>
         </scene>
         <!--Player View Controller-->
         <scene sceneID="1ea-D2-kQs">
             <objects>
-                <viewController id="dS9-yh-DjW" customClass="PlayerViewController" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PlayerViewController" id="dS9-yh-DjW" customClass="PlayerViewController" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JPM-Ya-nZH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

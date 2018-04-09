@@ -25,7 +25,7 @@ class VideoListViewController: UIViewController {
         return downloadSession
     }()
     
-    private let cellIdentifier = "videoCollectionViewCell"
+    private let cellIdentifier = "VideoListCell"
     
     let videoURL: URL = URL(string: "https://devimages-cdn.apple.com/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8")!
     
@@ -51,8 +51,11 @@ class VideoListViewController: UIViewController {
             let videoModel = videoModelList[i]
             
             if let localURLString = UserDefaults.standard.object(forKey: videoModel.remoteURL.absoluteString) as? String {
-                guard let localURL = URL(string: localURLString) else { continue }
+                let baseURL = URL(fileURLWithPath: NSHomeDirectory())
+                let localURL = baseURL.appendingPathComponent(localURLString)
+                
                 videoModel.localURL = localURL
+                videoModel.asset = AVURLAsset(url: localURL)
             }
         }
     }
@@ -74,26 +77,33 @@ extension VideoListViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
+        let videoListCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? VideoListCell ?? VideoListCell()
+        videoListCell.videoLabel.text = videoModelList[indexPath.row].title
         
-        return cell
+        return videoListCell
     }
 }
 
 extension VideoListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let playerViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else { return }
         
+        let videoModel = videoModelList[indexPath.row]
+        if videoModel.localURL == nil || videoModel.asset?.assetCache?.isPlayableOffline == false {
+            videoModel.setUpAssetDownload(downloadSession: downloadSession)
+        }
+        playerViewController.asset = videoModel.asset
+        
+        navigationController?.pushViewController(playerViewController, animated: true)
     }
 }
 
 extension VideoListViewController: AVAssetDownloadDelegate {
     func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didFinishDownloadingTo location: URL) {
-        guard let remoteURL = (videoModelList.filter {
-            guard let localURL = $0.localURL else { return false }
-            
-            return localURL == location
-        }).first?.remoteURL else { return }
+        guard let videoModel = (videoModelList.filter { $0.remoteURL == assetDownloadTask.urlAsset.url })
+            .first else { return }
+        videoModel.localURL = location
         
-        UserDefaults.standard.set(location.relativePath, forKey: remoteURL.absoluteString)
+        UserDefaults.standard.set(location.relativePath, forKey: videoModel.remoteURL.absoluteString)
     }
 }

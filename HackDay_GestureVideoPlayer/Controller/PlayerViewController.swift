@@ -34,7 +34,7 @@ class PlayerViewController: UIViewController {
         return activityIndicator
     }()
     
-    var videoURL: URL?
+    var asset: AVAsset?
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
     
@@ -250,8 +250,7 @@ class PlayerViewController: UIViewController {
     }
     
     private func prepareToPlay() {
-        guard let videoURL = videoURL else { return }
-        let asset = AVURLAsset(url: videoURL, options: [AVURLAssetAllowsCellularAccessKey: false])
+        guard let asset = asset else { return }
         
         let assetKeys = ["playable", "hasProtectedContent"]
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: assetKeys)

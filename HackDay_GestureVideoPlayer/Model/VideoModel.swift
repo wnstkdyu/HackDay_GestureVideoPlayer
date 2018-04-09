@@ -10,6 +10,9 @@ import Foundation
 import AVFoundation
 
 class VideoModel: NSObject {
+    lazy var title: String = {
+        return remoteURL.lastPathComponent
+    }()
     let remoteURL: URL
     var localURL: URL?
     var asset: AVURLAsset?

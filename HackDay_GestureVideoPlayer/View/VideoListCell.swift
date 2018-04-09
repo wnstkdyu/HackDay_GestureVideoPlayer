@@ -6,4 +6,9 @@
 //  Copyright © 2018년 Alpaca. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+class VideoListCell: UICollectionViewCell {
+    
+    @IBOutlet weak var videoLabel: UILabel!
+}
