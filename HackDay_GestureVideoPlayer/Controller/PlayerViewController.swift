@@ -173,9 +173,9 @@ class PlayerViewController: UIViewController {
         workItemArray.forEach { $0.cancel() }
         
         if isVisible {
-            fadeOutUI()
+            fadeOutUI(isLocked: isLocked)
         } else {
-            fadeInUI()
+            fadeInUI(isLocked: isLocked)
         }
     }
     
@@ -293,6 +293,7 @@ class PlayerViewController: UIViewController {
     }
     
     private func fadeInUI(isLocked: Bool = false) {
+        isVisible = true
         outletCollection.filter { isLocked ? $0 == lockButton : true }
             .forEach { outlet in
                 UIView.animate(withDuration: 1.0,
@@ -301,34 +302,69 @@ class PlayerViewController: UIViewController {
                                animations: {
                                 outlet.alpha = 1.0
                 }, completion: { [weak self] _ in
+                    if isLocked {
+                        let workItem = DispatchWorkItem {
+                            UIView.animate(withDuration: 1.0,
+                                           animations: { [weak self] in
+                                            self?.lockButton.alpha = 0.0
+                            }, completion: { [weak self] _ in
+                                    self?.isVisible = false
+                            })
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+                    }
                     guard outlet == self?.outletCollection.last else { return }
-                    self?.isVisible = true
+//                    self?.isVisible = true
                     
+                    // isLocked일 경우 isLocked도 사라져야 함.
                     let workItem = DispatchWorkItem {
-                        self?.fadeOutUI()
+                        guard let strongSelf = self else { return }
+                        self?.fadeOutUI(isLocked: strongSelf.isLocked)
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
                 })
         }
     }
     
-    @objc private func fadeOutUI(delay: Double = 0.0, isLocked: Bool = false) {
-        outletCollection.filter { isLocked ? $0 == lockButton : true }
+    @objc private func fadeOutUI(isLocked: Bool = false) {
+        isVisible = false
+        outletCollection.filter { isLocked ? $0 != lockButton : true }
             .forEach { outlet in
                 UIView.animate(withDuration: 1.0,
-                               delay: delay,
+                               delay: 0.0,
                                options: [.curveEaseInOut, .allowUserInteraction, .beginFromCurrentState],
                                animations: {
                                 outlet.alpha = 0.0
                 }, completion: { [weak self] _ in
+                    if isLocked {
+                        let workItem = DispatchWorkItem {
+                            UIView.animate(withDuration: 1.0,
+                                           animations: { [weak self] in
+                                            self?.lockButton.alpha = 0.0
+                            }, completion: { [weak self] _ in
+//                                    self?.isVisible = false
+                            })
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+                    }
                     guard outlet == self?.outletCollection.last else { return }
-                    self?.isVisible = false
+                    
+//                    self?.isVisible = false
                 })
         }
     }
     
     private func setLockUI(isLocked: Bool) {
         self.isLocked = isLocked
+        print(self.isLocked)
+        
+        workItemArray.forEach { $0.cancel() }
+        switch isLocked {
+        case true:
+            fadeOutUI(isLocked: true)
+        case false:
+            fadeInUI(isLocked: false)
+        }
     }
     
     private func prepareToPlay() {
