@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HackDay_GestureVideoPlayer/Controller/PlayerViewController.swift"
-            timestampString = "545025716.805465"
+            timestampString = "545390943.016719"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
+            startingLineNumber = "380"
+            endingLineNumber = "380"
             landmarkName = "setLockUI(isLocked:)"
             landmarkType = "7">
          </BreakpointContent>

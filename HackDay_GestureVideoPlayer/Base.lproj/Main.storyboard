@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hi1-h1-z3D">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -15,11 +15,11 @@
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="VideoListViewController" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tsR-wG-CS9">
-                                <rect key="frame" x="0.0" y="64" width="374" height="538"/>
+                                <rect key="frame" x="0.0" y="32" width="667" height="311"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="TZs-uO-Tvt">
                                     <size key="itemSize" width="212" height="196"/>
@@ -29,7 +29,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VideoListCell" id="59z-En-si7" customClass="VideoListCell" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target">
-                                        <rect key="frame" x="81" y="0.0" width="212" height="196"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="212" height="196"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="212" height="196"/>
@@ -81,26 +81,43 @@
             <objects>
                 <viewController storyboardIdentifier="PlayerViewController" id="dS9-yh-DjW" customClass="PlayerViewController" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JPM-Ya-nZH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mrN-uq-EQI">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <gestureRecognizers/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="1.5" translatesAutoresizingMaskIntoConstraints="NO" id="cHG-fc-XEu">
+                                <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mrN-uq-EQI">
+                                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="nB4-MJ-Crs" appends="YES" id="DZQ-Re-n2S"/>
+                                            <outletCollection property="gestureRecognizers" destination="zo8-1G-Bxe" appends="YES" id="Dcm-3O-SDN"/>
+                                            <outletCollection property="gestureRecognizers" destination="Lvn-5h-Lzv" appends="YES" id="Xxh-ZQ-2t1"/>
+                                        </connections>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="mrN-uq-EQI" secondAttribute="bottom" id="2lV-Bz-ubr"/>
+                                    <constraint firstItem="mrN-uq-EQI" firstAttribute="top" secondItem="cHG-fc-XEu" secondAttribute="top" id="80g-ys-ITz"/>
+                                    <constraint firstItem="mrN-uq-EQI" firstAttribute="centerX" secondItem="cHG-fc-XEu" secondAttribute="centerX" id="KOP-YF-pVW"/>
+                                    <constraint firstItem="mrN-uq-EQI" firstAttribute="centerY" secondItem="cHG-fc-XEu" secondAttribute="centerY" id="Yau-3U-xDh"/>
+                                    <constraint firstItem="mrN-uq-EQI" firstAttribute="leading" secondItem="cHG-fc-XEu" secondAttribute="leading" id="ahP-ca-UAG"/>
+                                    <constraint firstAttribute="trailing" secondItem="mrN-uq-EQI" secondAttribute="trailing" id="mqD-i5-MmI"/>
+                                </constraints>
                                 <connections>
-                                    <outletCollection property="gestureRecognizers" destination="Lvn-5h-Lzv" appends="YES" id="Xxh-ZQ-2t1"/>
-                                    <outletCollection property="gestureRecognizers" destination="nB4-MJ-Crs" appends="YES" id="DZQ-Re-n2S"/>
+                                    <outlet property="delegate" destination="dS9-yh-DjW" id="V0f-os-O85"/>
                                 </connections>
-                            </view>
+                            </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fOW-5t-nlC">
-                                <rect key="frame" x="4" y="24" width="48" height="48"/>
+                                <rect key="frame" x="4" y="4" width="48" height="48"/>
                                 <state key="normal" image="ic_keyboard_arrow_left_white_48pt"/>
                                 <connections>
                                     <action selector="backButtonTapped:" destination="dS9-yh-DjW" eventType="touchUpInside" id="19U-SM-cTN"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y9M-Yx-YEx">
-                                <rect key="frame" x="163.5" y="309.5" width="48" height="48"/>
+                                <rect key="frame" x="310" y="164" width="48" height="48"/>
                                 <state key="normal" image="ic_play_arrow_white_48pt"/>
                                 <state key="selected" image="ic_pause_white_48pt"/>
                                 <connections>
@@ -108,21 +125,21 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nt-Ff-rn0">
-                                <rect key="frame" x="107.5" y="309.5" width="48" height="48"/>
+                                <rect key="frame" x="254" y="164" width="48" height="48"/>
                                 <state key="normal" image="ic_replay_10_white_48pt"/>
                                 <connections>
                                     <action selector="replayButtonTapped:" destination="dS9-yh-DjW" eventType="touchUpInside" id="gX9-dq-PGp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fKa-fm-WWY">
-                                <rect key="frame" x="219.5" y="309.5" width="48" height="48"/>
+                                <rect key="frame" x="366" y="164" width="48" height="48"/>
                                 <state key="normal" image="ic_forward_10_white_48pt"/>
                                 <connections>
                                     <action selector="forwardButtonTapped:" destination="dS9-yh-DjW" eventType="touchUpInside" id="7e9-nf-r3Y"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvZ-iw-8On">
-                                <rect key="frame" x="287" y="309.5" width="48" height="48"/>
+                                <rect key="frame" x="579" y="164" width="48" height="48"/>
                                 <state key="normal" image="ic_lock_open_white_48pt"/>
                                 <state key="selected" image="ic_lock_outline_white_48pt"/>
                                 <connections>
@@ -130,20 +147,20 @@
                                 </connections>
                             </button>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LQL-j5-1pA">
-                                <rect key="frame" x="18" y="622" width="175" height="31"/>
+                                <rect key="frame" x="18" y="329.5" width="467" height="31"/>
                                 <color key="tintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <action selector="timeSliderValueChanged:" destination="dS9-yh-DjW" eventType="valueChanged" id="Ijz-4k-Hem"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5sU-uA-6og" userLabel="QualityLabel">
-                                <rect key="frame" x="313" y="626.5" width="42" height="20.5"/>
+                                <rect key="frame" x="605" y="334.5" width="42" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="A0L-Hw-WBm">
-                                <rect key="frame" x="211" y="628.5" width="82" height="17"/>
+                                <rect key="frame" x="503" y="336.5" width="82" height="17"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4lm-98-T9K" userLabel="CurrentTimeLabel">
                                         <rect key="frame" x="0.0" y="0.0" width="39" height="17"/>
@@ -160,37 +177,36 @@
                                 </subviews>
                             </stackView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BQj-Bb-gFp">
-                                <rect key="frame" x="187.5" y="334" width="0.0" height="0.0"/>
+                                <rect key="frame" x="334" y="188" width="0.0" height="0.0"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
                                 <color key="textColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="fKa-fm-WWY" firstAttribute="leading" secondItem="Y9M-Yx-YEx" secondAttribute="trailing" constant="8" symbolic="YES" id="0jf-94-xQO"/>
+                            <constraint firstItem="cHG-fc-XEu" firstAttribute="height" secondItem="JPM-Ya-nZH" secondAttribute="height" id="17h-PT-8qV"/>
                             <constraint firstItem="BQj-Bb-gFp" firstAttribute="centerX" secondItem="JPM-Ya-nZH" secondAttribute="centerX" id="3YU-Im-3Fv"/>
                             <constraint firstItem="Y9M-Yx-YEx" firstAttribute="centerY" secondItem="JPM-Ya-nZH" secondAttribute="centerY" id="5so-CM-JDg"/>
                             <constraint firstItem="5sU-uA-6og" firstAttribute="leading" secondItem="A0L-Hw-WBm" secondAttribute="trailing" constant="20" id="DKD-rH-OCZ"/>
                             <constraint firstItem="bvZ-iw-8On" firstAttribute="centerY" secondItem="Y9M-Yx-YEx" secondAttribute="centerY" id="FlX-se-gwv"/>
-                            <constraint firstItem="mrN-uq-EQI" firstAttribute="top" secondItem="JPM-Ya-nZH" secondAttribute="top" id="KyO-QB-r0Z"/>
+                            <constraint firstItem="cHG-fc-XEu" firstAttribute="width" secondItem="JPM-Ya-nZH" secondAttribute="width" id="Lhi-ba-war"/>
                             <constraint firstItem="LQL-j5-1pA" firstAttribute="leading" secondItem="rHd-oa-YF0" secondAttribute="leading" constant="20" id="Ofe-rA-TYw"/>
                             <constraint firstItem="LQL-j5-1pA" firstAttribute="centerY" secondItem="A0L-Hw-WBm" secondAttribute="centerY" id="PiC-PI-Up1"/>
+                            <constraint firstItem="cHG-fc-XEu" firstAttribute="centerX" secondItem="JPM-Ya-nZH" secondAttribute="centerX" id="S2v-vM-wq0"/>
                             <constraint firstItem="Y9M-Yx-YEx" firstAttribute="centerX" secondItem="JPM-Ya-nZH" secondAttribute="centerX" id="Snb-SN-3fl"/>
-                            <constraint firstItem="mrN-uq-EQI" firstAttribute="leading" secondItem="JPM-Ya-nZH" secondAttribute="leading" id="bxG-fP-K4O"/>
                             <constraint firstItem="A0L-Hw-WBm" firstAttribute="leading" secondItem="LQL-j5-1pA" secondAttribute="trailing" constant="20" id="ctt-0V-B7q"/>
                             <constraint firstItem="rHd-oa-YF0" firstAttribute="trailing" secondItem="bvZ-iw-8On" secondAttribute="trailing" constant="40" id="eUE-3j-84o"/>
                             <constraint firstItem="fOW-5t-nlC" firstAttribute="top" secondItem="rHd-oa-YF0" secondAttribute="top" constant="4" id="fnl-Ig-zQR"/>
+                            <constraint firstItem="cHG-fc-XEu" firstAttribute="centerY" secondItem="JPM-Ya-nZH" secondAttribute="centerY" id="iei-Vi-zvC"/>
                             <constraint firstItem="BQj-Bb-gFp" firstAttribute="centerY" secondItem="JPM-Ya-nZH" secondAttribute="centerY" id="isU-FU-JUE"/>
-                            <constraint firstAttribute="bottom" secondItem="mrN-uq-EQI" secondAttribute="bottom" id="jdy-aU-4od"/>
                             <constraint firstItem="Y9M-Yx-YEx" firstAttribute="leading" secondItem="7nt-Ff-rn0" secondAttribute="trailing" constant="8" symbolic="YES" id="kqX-ST-4br"/>
                             <constraint firstItem="fKa-fm-WWY" firstAttribute="centerY" secondItem="7nt-Ff-rn0" secondAttribute="centerY" id="mS7-bj-Ap4"/>
                             <constraint firstItem="rHd-oa-YF0" firstAttribute="trailing" secondItem="5sU-uA-6og" secondAttribute="trailing" constant="20" id="oUy-bS-orh"/>
                             <constraint firstItem="5sU-uA-6og" firstAttribute="centerY" secondItem="A0L-Hw-WBm" secondAttribute="centerY" id="pFY-9O-sQq"/>
                             <constraint firstItem="rHd-oa-YF0" firstAttribute="bottom" secondItem="5sU-uA-6og" secondAttribute="bottom" constant="20" id="pJC-wg-b6V"/>
                             <constraint firstItem="fOW-5t-nlC" firstAttribute="leading" secondItem="rHd-oa-YF0" secondAttribute="leading" constant="4" id="pay-M9-mUY"/>
-                            <constraint firstAttribute="trailing" secondItem="mrN-uq-EQI" secondAttribute="trailing" id="qdz-9m-XMw"/>
                             <constraint firstItem="7nt-Ff-rn0" firstAttribute="centerY" secondItem="Y9M-Yx-YEx" secondAttribute="centerY" id="sOn-iS-mX5"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="rHd-oa-YF0"/>
@@ -199,10 +215,13 @@
                         <outlet property="backButton" destination="fOW-5t-nlC" id="vaJ-8w-u4G"/>
                         <outlet property="centerTimeLabel" destination="BQj-Bb-gFp" id="JWE-7r-eWo"/>
                         <outlet property="currentTimeLabel" destination="4lm-98-T9K" id="mAA-qd-oNF"/>
+                        <outlet property="doubleTapGestureRecognizer" destination="zo8-1G-Bxe" id="hhs-lV-lJ2"/>
                         <outlet property="lockButton" destination="bvZ-iw-8On" id="uFu-fp-id4"/>
                         <outlet property="playButton" destination="Y9M-Yx-YEx" id="Zgb-hO-69K"/>
                         <outlet property="playerView" destination="mrN-uq-EQI" id="amc-Vu-Dsf"/>
                         <outlet property="qualityLabel" destination="5sU-uA-6og" id="azJ-av-bk9"/>
+                        <outlet property="scrollView" destination="cHG-fc-XEu" id="UF7-B2-75p"/>
+                        <outlet property="tapGestureRecognizer" destination="nB4-MJ-Crs" id="4Zk-7l-HEY"/>
                         <outlet property="timeSlider" destination="LQL-j5-1pA" id="WS6-Vc-qgz"/>
                         <outlet property="totalTimeLabel" destination="FQX-A4-sZs" id="1eW-AH-kjq"/>
                         <outletCollection property="outletCollection" destination="fOW-5t-nlC" collectionClass="NSMutableArray" id="eOn-pg-01E"/>
@@ -230,6 +249,11 @@
                         <outlet property="delegate" destination="dS9-yh-DjW" id="Zuc-25-GDf"/>
                     </connections>
                 </tapGestureRecognizer>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="zo8-1G-Bxe">
+                    <connections>
+                        <action selector="handleDoubleTapGesture:" destination="dS9-yh-DjW" id="yy6-Fw-93y"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="891.90404797601207" y="20"/>
         </scene>
@@ -239,7 +263,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hi1-h1-z3D" customClass="NavigationController" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" hidden="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="rzA-cv-t96">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="667" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

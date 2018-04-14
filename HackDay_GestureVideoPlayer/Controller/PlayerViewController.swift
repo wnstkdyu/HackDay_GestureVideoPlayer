@@ -17,6 +17,7 @@ enum Direction {
 
 class PlayerViewController: UIViewController {
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var playerView: UIView!
     @IBOutlet var outletCollection: [UIView]!
     @IBOutlet weak var backButton: UIButton!
@@ -28,6 +29,9 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var qualityLabel: UILabel!
     
     @IBOutlet weak var centerTimeLabel: UILabel!
+    
+    @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
+    @IBOutlet weak var doubleTapGestureRecognizer: UITapGestureRecognizer!
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
@@ -75,6 +79,8 @@ class PlayerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -176,6 +182,16 @@ class PlayerViewController: UIViewController {
             fadeOutUI(isLocked: isLocked)
         } else {
             fadeInUI(isLocked: isLocked)
+        }
+    }
+    
+    @IBAction func handleDoubleTapGesture(_ sender: UITapGestureRecognizer) {
+        print(scrollView.zoomScale)
+        
+        if scrollView.zoomScale == 1.0 {
+            scrollView.setZoomScale(1.5, animated: true)
+        } else {
+            scrollView.setZoomScale(1.0, animated: true)
         }
     }
     
@@ -293,7 +309,6 @@ class PlayerViewController: UIViewController {
     }
     
     private func fadeInUI(isLocked: Bool = false) {
-        isVisible = true
         outletCollection.filter { isLocked ? $0 == lockButton : true }
             .forEach { outlet in
                 UIView.animate(withDuration: 1.0,
@@ -314,7 +329,7 @@ class PlayerViewController: UIViewController {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
                     }
                     guard outlet == self?.outletCollection.last else { return }
-//                    self?.isVisible = true
+                    self?.isVisible = true
                     
                     // isLocked일 경우 isLocked도 사라져야 함.
                     let workItem = DispatchWorkItem {
@@ -327,7 +342,6 @@ class PlayerViewController: UIViewController {
     }
     
     @objc private func fadeOutUI(isLocked: Bool = false) {
-        isVisible = false
         outletCollection.filter { isLocked ? $0 != lockButton : true }
             .forEach { outlet in
                 UIView.animate(withDuration: 1.0,
@@ -342,14 +356,14 @@ class PlayerViewController: UIViewController {
                                            animations: { [weak self] in
                                             self?.lockButton.alpha = 0.0
                             }, completion: { [weak self] _ in
-//                                    self?.isVisible = false
+                                    self?.isVisible = false
                             })
                         }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
                     }
                     guard outlet == self?.outletCollection.last else { return }
                     
-//                    self?.isVisible = false
+                    self?.isVisible = false
                 })
         }
     }
@@ -510,5 +524,11 @@ extension PlayerViewController: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return false
+    }
+}
+
+extension PlayerViewController: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return playerView
     }
 }
