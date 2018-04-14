@@ -14,6 +14,7 @@ class VideoListViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     lazy private var videoModelList: [VideoModel] = []
+    var mediaSelectionMap: [AVAssetDownloadTask: AVMediaSelection] = [:]
     private let downloadSessionIdentifier = "downloadSessionIdentifier"
     lazy private var downloadSession: AVAssetDownloadURLSession = {
         let configuration = URLSessionConfiguration.background(withIdentifier: downloadSessionIdentifier)
@@ -105,5 +106,15 @@ extension VideoListViewController: AVAssetDownloadDelegate {
         videoModel.localURL = location
         
         UserDefaults.standard.set(location.relativePath, forKey: videoModel.remoteURL.absoluteString)
+    }
+    
+    func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didResolve resolvedMediaSelection: AVMediaSelection) {
+        print(resolvedMediaSelection)
+        
+        mediaSelectionMap.updateValue(resolvedMediaSelection, forKey: assetDownloadTask)
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        
     }
 }

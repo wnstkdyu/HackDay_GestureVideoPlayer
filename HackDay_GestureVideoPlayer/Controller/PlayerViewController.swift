@@ -19,6 +19,7 @@ class PlayerViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var playerView: UIView!
+    @IBOutlet weak var mediaSelectionTableView: UITableView!
     @IBOutlet var outletCollection: [UIView]!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
@@ -26,7 +27,8 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var timeSlider: UISlider!
     @IBOutlet weak var currentTimeLabel: UILabel!
     @IBOutlet weak var totalTimeLabel: UILabel!
-    @IBOutlet weak var qualityLabel: UILabel!
+    @IBOutlet weak var subtitleButton: UIButton!
+    @IBOutlet weak var resolutionButton: UIButton!
     
     @IBOutlet weak var centerTimeLabel: UILabel!
     
@@ -68,6 +70,8 @@ class PlayerViewController: UIViewController {
     private var firstBrightness: CGFloat?
     private var firstVolume: Float?
     
+    private var mediaSelectionDataSource = MediaSelectionDataSource()
+    
     // 화면 회전관련 변수 오버라이드
     override var shouldAutorotate: Bool {
         return true
@@ -81,6 +85,9 @@ class PlayerViewController: UIViewController {
         super.viewDidLoad()
         
         tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
+        
+        mediaSelectionTableView.rowHeight = mediaSelectionTableView.frame.height / 3
+        mediaSelectionTableView.dataSource = mediaSelectionDataSource
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -173,6 +180,28 @@ class PlayerViewController: UIViewController {
         let timeToBeChanged = CMTime(seconds: currentTimeSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         
         stopPlayingAndSeekSmoothlyToTime(newChaseTime: timeToBeChanged)
+    }
+    
+    @IBAction func subtitleButtonTapped(_ sender: UIButton) {
+        mediaSelectionDataSource.setSubtitleDataSource()
+        mediaSelectionTableView.reloadData()
+        
+        UIView.animate(withDuration: 1.0) { [weak self] in
+            guard let tableViewFrame = self?.mediaSelectionTableView.frame,
+                let viewHeight = self?.view.frame.height else { return }
+            self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
+        }
+    }
+    
+    @IBAction func resolutionButtonTapped(_ sender: UIButton) {
+        mediaSelectionDataSource.setResolutionDataSource()
+        mediaSelectionTableView.reloadData()
+        
+        UIView.animate(withDuration: 1.0) { [weak self] in
+            guard let tableViewFrame = self?.mediaSelectionTableView.frame,
+                let viewHeight = self?.view.frame.height else { return }
+            self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
+        }
     }
     
     @IBAction func handleTapGesture(_ sender: UITapGestureRecognizer) {
@@ -279,6 +308,23 @@ class PlayerViewController: UIViewController {
         } else {
             currentTimeLabel.text = "00:00"
         }
+    }
+    
+    private func setSubtitleUI(asset: AVAsset) {
+        if let group = asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
+            for option in group.options {
+                switch option.displayName {
+                case "Korean":
+                    mediaSelectionDataSource.subtitlesArray.append((.korean, false))
+                case "English":
+                    mediaSelectionDataSource.subtitlesArray.append((.english, false))
+                default:
+                    continue
+                }
+            }
+        }
+        
+        mediaSelectionDataSource.subtitlesArray.append((.none, true))
     }
     
     private func showUI() {
@@ -397,6 +443,7 @@ class PlayerViewController: UIViewController {
         playerLayer?.frame = playerView.frame
         
         setPlayerUI(asset: asset)
+        setSubtitleUI(asset: asset)
         
         guard let playerLayer = playerLayer else { return }
         playerView.layer.addSublayer(playerLayer)
@@ -530,5 +577,28 @@ extension PlayerViewController: UIGestureRecognizerDelegate {
 extension PlayerViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return playerView
+    }
+}
+
+extension PlayerViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryType = .checkmark
+        
+        switch mediaSelectionDataSource.isSubtitle {
+        case true:
+            for i in mediaSelectionDataSource.subtitlesArray.indices {
+                let subtitleInfo = mediaSelectionDataSource.subtitlesArray[i]
+                
+            }
+            break
+        case false:
+            break
+        }
+        
+        UIView.animate(withDuration: 1.0) { [weak self] in
+            guard let viewHeight = self?.view.frame.height else { return }
+            tableView.frame.origin.y = viewHeight
+        }
     }
 }
