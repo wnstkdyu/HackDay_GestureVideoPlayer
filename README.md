@@ -2,6 +2,14 @@
 
 ## [데모 영상](https://youtu.be/F3nACRtB1TY)
 
+## 공부 방법
+- [Media Playback Programming Guide - Apple Developer Documentation](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/MediaPlaybackGuide/Contents/Resources/en.lproj/Introduction/Introduction.html#//apple_ref/doc/uid/TP40016757-CH1-SW1)
+  - 최대한 가이드를 따라 기본적인 Playback 앱을 어떻게 만드는지 익힘.
+  - AVFoundation에 대한 기초를 익힘.
+- [Advances in AVFoundation Playback - WWDC 2016 Session 503](https://developer.apple.com/videos/play/wwdc2016/503/)
+  - `AVPlayerItem`의 *BufferingState*에 대해 익힘.
+  - 각 화질에 맞는 `preferredPeakBitRate`에 대한 정보로 화질 정보 구현.
+
 ## 요구사항(필수)
 비디오 리스트뷰
 - 비디오 리스트 제공 (컬렉션뷰)
