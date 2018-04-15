@@ -186,7 +186,7 @@ class PlayerViewController: UIViewController {
         mediaSelectionDataSource.setSubtitleDataSource()
         mediaSelectionTableView.reloadData()
         
-        UIView.animate(withDuration: 1.0) { [weak self] in
+        UIView.animate(withDuration: 0.3) { [weak self] in
             guard let tableViewFrame = self?.mediaSelectionTableView.frame,
                 let viewHeight = self?.view.frame.height else { return }
             self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
@@ -197,7 +197,7 @@ class PlayerViewController: UIViewController {
         mediaSelectionDataSource.setResolutionDataSource()
         mediaSelectionTableView.reloadData()
         
-        UIView.animate(withDuration: 1.0) { [weak self] in
+        UIView.animate(withDuration: 0.3) { [weak self] in
             guard let tableViewFrame = self?.mediaSelectionTableView.frame,
                 let viewHeight = self?.view.frame.height else { return }
             self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
@@ -437,8 +437,10 @@ class PlayerViewController: UIViewController {
                                options: [.old, .new],
                                context: &playerItemContext)
         
-        player = AVPlayer(playerItem: playerItem)
+        player = AVPlayer()
         playerLayer = AVPlayerLayer(player: player)
+        player?.replaceCurrentItem(with: playerItem)
+        
         playerLayer?.videoGravity = .resizeAspectFill
         playerLayer?.frame = playerView.frame
         
@@ -589,14 +591,30 @@ extension PlayerViewController: UITableViewDelegate {
         case true:
             for i in mediaSelectionDataSource.subtitlesArray.indices {
                 let subtitleInfo = mediaSelectionDataSource.subtitlesArray[i]
-                
+                if i == indexPath.row {
+                    mediaSelectionDataSource.subtitlesArray[i] = (subtitleInfo.0, true)
+                } else {
+                    mediaSelectionDataSource.subtitlesArray[i] = (subtitleInfo.0, false)
+                }
             }
             break
         case false:
-            break
+            guard let playerItem = player?.currentItem else { return }
+            
+            for i in mediaSelectionDataSource.resolutionsArray.indices {
+                let resolutionInfo = mediaSelectionDataSource.resolutionsArray[i]
+                if i == indexPath.row {
+                    mediaSelectionDataSource.resolutionsArray[i] = (resolutionInfo.0, true)
+                    playerItem.preferredPeakBitRate = resolutionInfo.0.getPreferredBitRate()
+                } else {
+                    mediaSelectionDataSource.resolutionsArray[i] = (resolutionInfo.0, false)
+                }
+            }
         }
         
-        UIView.animate(withDuration: 1.0) { [weak self] in
+        tableView.reloadData()
+        
+        UIView.animate(withDuration: 0.3) { [weak self] in
             guard let viewHeight = self?.view.frame.height else { return }
             tableView.frame.origin.y = viewHeight
         }

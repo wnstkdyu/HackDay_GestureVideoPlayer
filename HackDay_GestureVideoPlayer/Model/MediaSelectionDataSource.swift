@@ -9,13 +9,24 @@
 enum Subtitle: String {
     case korean = "Korean"
     case english = "English"
-    case none
+    case none = "자막 없음"
 }
 
 enum Resolution: String {
-    case high = "720P"
-    case normal = "480P"
-    case low = "240P"
+    case high = "1080P"
+    case normal = "720P"
+    case low = "360P"
+    
+    func getPreferredBitRate() -> Double {
+        switch self {
+        case .high:
+            return 11000
+        case .normal:
+            return 4500
+        case .low:
+            return 600
+        }
+    }
 }
 
 import UIKit
@@ -55,6 +66,8 @@ class MediaSelectionDataSource: NSObject, UITableViewDataSource {
             
             if subtitleData.1 {
                 cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
             }
         case false:
             let resolutionData = resolutionsArray[indexPath.row]
@@ -62,6 +75,8 @@ class MediaSelectionDataSource: NSObject, UITableViewDataSource {
             
             if resolutionData.1 {
                 cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
             }
         }
         

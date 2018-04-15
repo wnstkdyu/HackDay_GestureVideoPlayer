@@ -286,6 +286,8 @@
                         <outletCollection property="outletCollection" destination="bvZ-iw-8On" collectionClass="NSMutableArray" id="GPR-bo-ViG"/>
                         <outletCollection property="outletCollection" destination="LQL-j5-1pA" collectionClass="NSMutableArray" id="PLA-bh-o3l"/>
                         <outletCollection property="outletCollection" destination="A0L-Hw-WBm" collectionClass="NSMutableArray" id="J9P-pX-n5D"/>
+                        <outletCollection property="outletCollection" destination="TGh-xu-I58" collectionClass="NSMutableArray" id="1OG-Pn-lQq"/>
+                        <outletCollection property="outletCollection" destination="glN-4Z-9rF" collectionClass="NSMutableArray" id="QAg-j0-YSl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eVQ-gf-jIz" userLabel="First Responder" sceneMemberID="firstResponder"/>
