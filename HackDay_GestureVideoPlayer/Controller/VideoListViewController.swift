@@ -42,9 +42,7 @@ class VideoListViewController: UIViewController {
         super.viewDidLoad()
         
         createVideoModelList()
-        
-        guard let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
-        flowLayout.itemSize = CGSize(width: view.frame.width / 2 - flowLayout.minimumInteritemSpacing, height: view.frame.width / 2 - flowLayout.minimumLineSpacing)
+        setCollectionViewItemSize()
     }
     
     private func createVideoModelList() {
@@ -62,6 +60,12 @@ class VideoListViewController: UIViewController {
                 videoModel.asset = AVURLAsset(url: localURL)
             }
         }
+    }
+    
+    private func setCollectionViewItemSize() {
+        guard let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        flowLayout.itemSize = CGSize(width: view.frame.width / 2 - flowLayout.minimumInteritemSpacing,
+                                     height: view.frame.width / 2 - flowLayout.minimumLineSpacing)
     }
     
 //    private func restorePendingDownloads() {
