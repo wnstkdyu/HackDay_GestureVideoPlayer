@@ -593,6 +593,14 @@ extension PlayerViewController: UITableViewDelegate {
                 let subtitleInfo = mediaSelectionDataSource.subtitlesArray[i]
                 if i == indexPath.row {
                     mediaSelectionDataSource.subtitlesArray[i] = (subtitleInfo.0, true)
+                    
+                    if let group = asset?.mediaSelectionGroup(forMediaCharacteristic: .legible) {
+                        guard let locale = subtitleInfo.0.getLocale() else { return }
+                        let options = AVMediaSelectionGroup.mediaSelectionOptions(from: group.options, with: locale)
+                        if let option = options.first {
+                            player?.currentItem?.select(option, in: group)
+                        }
+                    }
                 } else {
                     mediaSelectionDataSource.subtitlesArray[i] = (subtitleInfo.0, false)
                 }

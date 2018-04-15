@@ -10,6 +10,17 @@ enum Subtitle: String {
     case korean = "Korean"
     case english = "English"
     case none = "자막 없음"
+    
+    func getLocale() -> Locale? {
+        switch self {
+        case .korean:
+            return Locale(identifier: "ko-KR")
+        case .english:
+            return Locale(identifier: "en-US")
+        case .none:
+            return nil
+        }
+    }
 }
 
 enum Resolution: String {
