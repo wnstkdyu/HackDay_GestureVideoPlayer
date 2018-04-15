@@ -1,5 +1,7 @@
 # HackDay_GestureVideoPlayer
 
+## [데모 영상](https://youtu.be/F3nACRtB1TY)
+
 ## 요구사항(필수)
 비디오 리스트뷰
 - 비디오 리스트 제공 (컬렉션뷰)

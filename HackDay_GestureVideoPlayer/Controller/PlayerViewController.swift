@@ -186,26 +186,19 @@ class PlayerViewController: UIViewController {
         mediaSelectionDataSource.setSubtitleDataSource()
         mediaSelectionTableView.reloadData()
         
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let tableViewFrame = self?.mediaSelectionTableView.frame,
-                let viewHeight = self?.view.frame.height else { return }
-            self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
-        }
+        showMediaSelectionTableView()
     }
     
     @IBAction func resolutionButtonTapped(_ sender: UIButton) {
         mediaSelectionDataSource.setResolutionDataSource()
         mediaSelectionTableView.reloadData()
         
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let tableViewFrame = self?.mediaSelectionTableView.frame,
-                let viewHeight = self?.view.frame.height else { return }
-            self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
-        }
+        showMediaSelectionTableView()
     }
     
     @IBAction func handleTapGesture(_ sender: UITapGestureRecognizer) {
         workItemArray.forEach { $0.cancel() }
+        hideMediaSelectionTableView()
         
         if isVisible {
             fadeOutUI(isLocked: isLocked)
@@ -337,6 +330,25 @@ class PlayerViewController: UIViewController {
         outletCollection.filter { $0 != backButton }
             .forEach { $0.isHidden = true }
         showActivityIndicator()
+    }
+    
+    private func showMediaSelectionTableView() {
+        outletCollection.forEach { $0.isHidden = true }
+        
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let tableViewFrame = self?.mediaSelectionTableView.frame,
+                let viewHeight = self?.view.frame.height else { return }
+            self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
+        }
+    }
+    
+    private func hideMediaSelectionTableView() {
+        outletCollection.forEach { $0.isHidden = false }
+        
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let viewHeight = self?.view.frame.height else { return }
+            self?.mediaSelectionTableView.frame.origin.y = viewHeight
+        }
     }
     
     private func showActivityIndicator() {
@@ -622,9 +634,6 @@ extension PlayerViewController: UITableViewDelegate {
         
         tableView.reloadData()
         
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let viewHeight = self?.view.frame.height else { return }
-            tableView.frame.origin.y = viewHeight
-        }
+        hideMediaSelectionTableView()
     }
 }
