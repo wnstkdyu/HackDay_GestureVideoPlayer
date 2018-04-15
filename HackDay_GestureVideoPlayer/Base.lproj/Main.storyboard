@@ -44,6 +44,7 @@
                                                 </label>
                                             </subviews>
                                         </view>
+                                        <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="lDb-hp-X6w" firstAttribute="centerX" secondItem="59z-En-si7" secondAttribute="centerX" id="0NB-1H-ns7"/>
                                             <constraint firstItem="lDb-hp-X6w" firstAttribute="centerY" secondItem="59z-En-si7" secondAttribute="centerY" id="tuF-HH-Eux"/>
