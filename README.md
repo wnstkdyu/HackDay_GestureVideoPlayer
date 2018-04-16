@@ -1,6 +1,7 @@
 # HackDay_GestureVideoPlayer
 
-## [데모 영상](https://youtu.be/F3nACRtB1TY)
+## 데모 영상
+[![Video Label](http://img.youtube.com/vi/F3nACRtB1TY/0.jpg)](https://youtu.be/F3nACRtB1TY)
 
 ## 공부 방법
 - [Media Playback Programming Guide - Apple Developer Documentation](https://developer.apple.com/library/content/documentation/AudioVideo/Conceptual/MediaPlaybackGuide/Contents/Resources/en.lproj/Introduction/Introduction.html#//apple_ref/doc/uid/TP40016757-CH1-SW1)
