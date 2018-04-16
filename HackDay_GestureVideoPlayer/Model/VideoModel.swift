@@ -10,7 +10,9 @@ import Foundation
 import AVFoundation
 
 class VideoModel: NSObject {
-    lazy var title: String = {
+    lazy var title: String = { [weak self] in // retain cycle 피하자!
+        guard let remoteURL = self?.remoteURL else { return "" }
+        
         return remoteURL.lastPathComponent
     }()
     let remoteURL: URL
