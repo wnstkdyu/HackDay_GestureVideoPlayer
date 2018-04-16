@@ -127,7 +127,7 @@ class PlayerViewController: UIViewController {
             switch playerItemStatus {
             case .readyToPlay:
                 guard isFirstPlaying else { return }
-
+                
                 showUI()
                 play()
                 
@@ -303,7 +303,7 @@ class PlayerViewController: UIViewController {
         }
     }
     
-    private func setSubtitleUI(asset: AVAsset) {
+    private func getSubtitleInfo(asset: AVAsset) {
         if let group = asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
             for option in group.options {
                 switch option.displayName {
@@ -457,7 +457,7 @@ class PlayerViewController: UIViewController {
         playerLayer?.frame = playerView.frame
         
         setPlayerUI(asset: asset)
-        setSubtitleUI(asset: asset)
+        getSubtitleInfo(asset: asset)
         
         guard let playerLayer = playerLayer else { return }
         playerView.layer.addSublayer(playerLayer)

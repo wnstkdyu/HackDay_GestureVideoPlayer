@@ -28,10 +28,23 @@ class VideoModel: NSObject {
         asset = AVURLAsset(url: remoteURL)
         guard let asset = asset else { return }
         
+            
+        // Retrieve the AVMediaSelectionGroup for the specified characteristic.
+        if let group = asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
+            // Print its options.
+            for option in group.options {
+                print("  Option: \(option.displayName)")
+            }
+        }
+        
+        let mediaSelectionGroup = asset.preferredMediaSelection
+        print("asset의 미디어 셀렉션: \(mediaSelectionGroup)")
+        let mutableMediaSelection = mediaSelectionGroup.mutableCopy() as! AVMutableMediaSelection
+        
         downloadTask = downloadSession.makeAssetDownloadTask(asset: asset,
                                                              assetTitle: " ",
                                                              assetArtworkData: nil,
-                                                             options: nil)
+                                                             options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 2000000])
         
         downloadTask?.resume()
     }
