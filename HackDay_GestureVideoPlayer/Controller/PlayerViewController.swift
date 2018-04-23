@@ -290,8 +290,8 @@ class PlayerViewController: UIViewController {
     }
     
     private func changeToLandscape() {
-            let orientationValue = UIDeviceOrientation.landscapeRight.rawValue
-            UIDevice.current.setValue(orientationValue, forKey: "orientation")
+        let orientationValue = UIDeviceOrientation.landscapeRight.rawValue
+        UIDevice.current.setValue(orientationValue, forKey: "orientation")
     }
     
     private func setPlayerUI(asset: AVAsset) {
@@ -321,7 +321,7 @@ class PlayerViewController: UIViewController {
     }
     
     private func showUI() {
-        outletCollection.filter { $0 != backButton}
+        outletCollection.filter { $0 != backButton }
             .forEach { $0.isHidden = false }
         hideActivityIndicator()
     }
