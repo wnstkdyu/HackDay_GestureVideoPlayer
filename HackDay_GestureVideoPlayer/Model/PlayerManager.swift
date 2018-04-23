@@ -21,7 +21,7 @@ class PlayerManager: NSObject {
     
     var asset: AVAsset
     var player: AVPlayer
-    private var playerLayer: AVPlayerLayer
+    var playerLayer: AVPlayerLayer
     
     private var playerItemContext = 0
     private var playerItemStatus: AVPlayerItemStatus = .unknown
@@ -84,6 +84,8 @@ class PlayerManager: NSObject {
         // Player와 PlayerLayer 준비
         player.replaceCurrentItem(with: playerItem)
         playerLayer.videoGravity = .resizeAspectFill
+        
+        addPeriodicTimeObserver()
     }
     
     private func addPeriodicTimeObserver() {

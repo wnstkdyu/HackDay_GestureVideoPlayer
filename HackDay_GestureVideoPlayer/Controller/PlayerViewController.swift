@@ -50,6 +50,7 @@ class PlayerViewController: UIViewController {
         return expandingView
     }()
     
+    // PlayerManager
     var playerManager: PlayerManager?
     
     private var isVisible: Bool = true
@@ -94,6 +95,15 @@ class PlayerViewController: UIViewController {
         super.viewDidAppear(animated)
         
         playerManager?.prepareToPlay()
+        // PlayerView에서 준비할 것들.
+        playerManager?.playerLayer.frame = playerView.frame
+        
+        guard let asset = playerManager?.asset else { return }
+        setPlayerUI(asset: asset)
+        getSubtitleInfo(asset: asset)
+
+        guard let playerLayer = playerManager?.playerLayer else { return }
+        playerView.layer.addSublayer(playerLayer)
     }
     
     @IBAction func backButtonTapped(_ sender: UIButton) {
@@ -394,160 +404,46 @@ class PlayerViewController: UIViewController {
             fadeInUI(isLocked: false)
         }
     }
-    
-//    private func prepareToPlay() {
-//        guard let asset = asset else { return }
-//
-//        let assetKeys = ["playable", "hasProtectedContent"]
-//        let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: assetKeys)
-//        playerItem.addObserver(self,
-//                               forKeyPath: #keyPath(AVPlayerItem.status),
-//                               options: [.old, .new],
-//                               context: &playerItemContext)
-//
-//        player = AVPlayer()
-//        playerLayer = AVPlayerLayer(player: player)
-//        player?.replaceCurrentItem(with: playerItem)
-//
-//        playerLayer?.videoGravity = .resizeAspectFill
-//
-//        // PlayerView에서 준비할 것들.
-//        playerLayer?.frame = playerView.frame
-//
-//        setPlayerUI(asset: asset)
-//        getSubtitleInfo(asset: asset)
-//
-//        guard let playerLayer = playerLayer else { return }
-//        playerView.layer.addSublayer(playerLayer)
-//
-//        addPeriodicTimeObserver()
-//    }
-//
-//    private func addPeriodicTimeObserver() {
-//        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-//
-//        timeObserverToken = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
-//            self?.currentTimeLabel.text = time.seconds.toTimeFormat
-//
-//            guard let timeSliderMaximumValue = self?.timeSlider.maximumValue,
-//                let assetDuration = self?.player?.currentItem?.duration.seconds else { return }
-//            let value = timeSliderMaximumValue * Float(time.seconds / assetDuration)
-//            self?.timeSlider.setValue(value, animated: true)
-//        })
-//    }
-//
-//    private func removePeriodicTimeObserver() {
-//        guard let timeObserverToken = timeObserverToken else { return }
-//        player?.removeTimeObserver(timeObserverToken)
-//        self.timeObserverToken = nil
-//    }
-//
-//    private func play() {
-//        playButton.isSelected = true
-//
-//        player?.play()
-//
-//        guard isVisible else { return }
-//        let workItem = DispatchWorkItem { [weak self] in
-//            self?.fadeOutUI()
-//        }
-//        workItemArray.append(workItem)
-//        workItem.notify(queue: .main) {
-//
-//        }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
-//    }
-//
-//    private func pause() {
-//        playButton.isSelected = false
-//
-//        player?.pause()
-//
-//        guard isVisible else { return }
-//        let workItem = DispatchWorkItem { [weak self] in
-//            self?.fadeOutUI()
-//        }
-//        workItemArray.append(workItem)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
-//    }
-//
-//    private func changeTenSeconds(to direction: Direction) {
-//        guard let currentTimeSeconds = player?.currentTime().seconds else { return }
-//        let timeToBeChanged: CMTime = {
-//            switch direction {
-//            case .back:
-//                return CMTime(seconds: currentTimeSeconds - 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-//            case .forward:
-//                return CMTime(seconds: currentTimeSeconds + 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-//            }
-//        }()
-//
-//        player?.seek(to: timeToBeChanged,
-//                     toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero) { [weak self] _ in
-//            guard let isPlaying = self?.player?.isPlaying else { return }
-//            switch isPlaying {
-//            case true:
-//                self?.play()
-//            case false:
-//                self?.pause()
-//            }
-//        }
-//    }
-//
-//    private func stopPlayingAndSeekSmoothlyToTime(newChaseTime:CMTime) {
-//        if CMTimeCompare(newChaseTime, chaseTime) != 0 {
-//            chaseTime = newChaseTime;
-//
-//            if !isSeekInProgress {
-//                trySeekToChaseTime()
-//            }
-//        }
-//    }
-//
-//    private func trySeekToChaseTime() {
-//        guard playerItemStatus == .readyToPlay else { return }
-//        actuallySeekToTime()
-//    }
-//
-//    private func actuallySeekToTime() {
-//        isSeekInProgress = true
-//        let seekTimeInProgress = chaseTime
-//        player?.seek(to: seekTimeInProgress,
-//                     toleranceBefore: kCMTimeZero,
-//                     toleranceAfter: kCMTimeZero) { [weak self] isFinished in
-//                        guard let strongSelf = self else { return }
-//                        if CMTimeCompare(seekTimeInProgress, strongSelf.chaseTime) == 0 {
-//                            strongSelf.isSeekInProgress = false
-//                        } else {
-//                            strongSelf.trySeekToChaseTime()
-//                        }
-//
-//                        guard let isPlaying = self?.player?.isPlaying else { return }
-//                        switch isPlaying {
-//                        case true:
-//                            self?.play()
-//                        case false:
-//                            self?.pause()
-//                        }
-//        }
-//    }
 }
 
 extension PlayerViewController: PlayerManagerDelegate {
     func isPlayedFirst() {
-        <#code#>
+        showUI()
+        playerManager?.play()
     }
     
     func setTimeObserverValue(time: CMTime) {
-        <#code#>
+        currentTimeLabel.text = time.seconds.toTimeFormat
+        
+        let timeSliderMaximumValue = timeSlider.maximumValue
+        guard let assetDuration = playerManager?.player.currentItem?.duration.seconds else { return }
+        let value = timeSliderMaximumValue * Float(time.seconds / assetDuration)
+        timeSlider.setValue(value, animated: true)
     }
     
     func playerPlayed() {
-        <#code#>
+        playButton.isSelected = true
+        
+        guard isVisible else { return }
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.fadeOutUI()
+        }
+        
+        workItemArray.append(workItem)
+        workItem.notify(queue: .main) {
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
     }
     
     func playerPaused() {
-        <#code#>
+        playButton.isSelected = false
+        
+        guard isVisible else { return }
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.fadeOutUI()
+        }
+        workItemArray.append(workItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
     }
 }
 
