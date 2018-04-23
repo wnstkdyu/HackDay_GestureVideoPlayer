@@ -100,7 +100,8 @@ extension VideoListViewController: UICollectionViewDelegate {
         if videoModel.localURL == nil || videoModel.asset?.assetCache?.isPlayableOffline == false {
             videoModel.setUpAssetDownload(downloadSession: downloadSession)
         }
-        playerViewController.asset = videoModel.asset
+        guard let asset = videoModel.asset else { return }
+        playerViewController.playerManager = PlayerManager(asset: asset)
         
         navigationController?.pushViewController(playerViewController, animated: true)
     }

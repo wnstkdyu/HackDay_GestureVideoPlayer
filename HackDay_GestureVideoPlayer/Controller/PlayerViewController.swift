@@ -50,18 +50,8 @@ class PlayerViewController: UIViewController {
         return expandingView
     }()
     
-    var asset: AVAsset?
-    private var player: AVPlayer?
-    private var playerLayer: AVPlayerLayer?
+    var playerManager: PlayerManager?
     
-    private var playerItemContext = 0
-    private var playerItemStatus: AVPlayerItemStatus = .unknown
-    private var timeObserverToken: Any?
-    
-    private var chaseTime: CMTime = kCMTimeZero
-    private var isSeekInProgress: Bool = false
-    
-    private var isFirstPlaying: Bool = true
     private var isVisible: Bool = true
     private var isLocked: Bool = false
     private var workItemArray: [DispatchWorkItem] = []
@@ -84,6 +74,8 @@ class PlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        playerManager?.delegate = self
+        
         tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
         
         mediaSelectionTableView.rowHeight = mediaSelectionTableView.frame.height / 3
@@ -101,43 +93,7 @@ class PlayerViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        prepareToPlay()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        removePeriodicTimeObserver()
-    }
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
-                               change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard context == &playerItemContext else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-            return
-        }
-        
-        if keyPath == #keyPath(AVPlayerItem.status) {
-            if let statusNumber = change?[.newKey] as? NSNumber {
-                playerItemStatus = AVPlayerItemStatus(rawValue: statusNumber.intValue)!
-            } else {
-                playerItemStatus = .unknown
-            }
-            
-            switch playerItemStatus {
-            case .readyToPlay:
-                guard isFirstPlaying else { return }
-                
-                showUI()
-                play()
-                
-                isFirstPlaying = false
-            case .failed:
-                print("PlayerItem failed.")
-            case .unknown:
-                print("PlayerItem is not yet ready.")
-            }
-        }
+        playerManager?.prepareToPlay()
     }
     
     @IBAction func backButtonTapped(_ sender: UIButton) {
@@ -147,18 +103,18 @@ class PlayerViewController: UIViewController {
     @IBAction func playButtonTapped(_ sender: UIButton) {
         switch sender.isSelected {
         case true:
-            pause()
+            playerManager?.pause()
         case false:
-            play()
+            playerManager?.play()
         }
     }
     
     @IBAction func replayButtonTapped(_ sender: UIButton) {
-        changeTenSeconds(to: .back)
+        playerManager?.changeTenSeconds(to: .back)
     }
     
     @IBAction func forwardButtonTapped(_ sender: UIButton) {
-        changeTenSeconds(to: .forward)
+        playerManager?.changeTenSeconds(to: .forward)
     }
     
     @IBAction func lockButtonTapped(_ sender: UIButton) {
@@ -175,11 +131,11 @@ class PlayerViewController: UIViewController {
     @IBAction func timeSliderValueChanged(_ sender: UISlider) {
         let valueRatio = sender.value / sender.maximumValue
         
-        guard let totalSeconds = player?.currentItem?.duration.seconds else { return }
-        let currentTimeSeconds = Double(valueRatio) * totalSeconds
+        guard let totoalSeconds = playerManager?.player.currentItem?.duration.seconds else { return }
+        let currentTimeSeconds = Double(valueRatio) * totoalSeconds
         let timeToBeChanged = CMTime(seconds: currentTimeSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         
-        stopPlayingAndSeekSmoothlyToTime(newChaseTime: timeToBeChanged)
+        playerManager?.stopPlayingAndSeekSmoothlyToTime(newChaseTime: timeToBeChanged)
     }
     
     @IBAction func subtitleButtonTapped(_ sender: UIButton) {
@@ -222,7 +178,7 @@ class PlayerViewController: UIViewController {
         case .began:
             centerTimeLabel.isHidden = false
             firstBrightness = UIScreen.main.brightness
-            firstVolume = player?.volume
+            firstVolume = playerManager?.player.volume
             
             view.addSubview(expandingView)
         case .changed:
@@ -234,8 +190,8 @@ class PlayerViewController: UIViewController {
                 // 좌우로 움직임
                 let ratio = Double(xRatio)
                 
-                guard let currentTimeSeconds = player?.currentTime().seconds,
-                    let assetDuration = player?.currentItem?.duration.seconds else { return }
+                guard let currentTimeSeconds = playerManager?.player.currentTime().seconds,
+                    let assetDuration = playerManager?.player.currentItem?.duration.seconds else { return }
                 var newSeconds = currentTimeSeconds + assetDuration * ratio
                 if newSeconds > assetDuration {
                     newSeconds = assetDuration
@@ -253,7 +209,7 @@ class PlayerViewController: UIViewController {
                 } else {
                     // 오른쪽: 볼륨
                     guard let firstVolume = firstVolume else { return }
-                    player?.volume = firstVolume - Float(yRatio)
+                    playerManager?.player.volume = firstVolume - Float(yRatio)
                     
                     expandingView.frame.origin = CGPoint(x: playerView.frame.width / 2, y: playerView.frame.height * CGFloat(1 - (firstVolume - Float(yRatio))))
                     if expandingView.frame.origin.y < 0 {
@@ -263,15 +219,15 @@ class PlayerViewController: UIViewController {
             }
         case .ended:
             if let newCMTime = newCMTime {
-                player?.seek(to: newCMTime,
+                playerManager?.player.seek(to: newCMTime,
                              toleranceBefore: kCMTimeZero,
                              toleranceAfter: kCMTimeZero) { [weak self] _ in
-                                guard let isPlaying = self?.player?.isPlaying else { return }
+                                guard let isPlaying = self?.playerManager?.player.isPlaying else { return }
                                 switch isPlaying {
                                 case true:
-                                    self?.play()
+                                    self?.playerManager?.play()
                                 case false:
-                                    self?.pause()
+                                    self?.playerManager?.pause()
                                 }
                 }
             }
@@ -439,139 +395,159 @@ class PlayerViewController: UIViewController {
         }
     }
     
-    private func prepareToPlay() {
-        guard let asset = asset else { return }
-        
-        let assetKeys = ["playable", "hasProtectedContent"]
-        let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: assetKeys)
-        playerItem.addObserver(self,
-                               forKeyPath: #keyPath(AVPlayerItem.status),
-                               options: [.old, .new],
-                               context: &playerItemContext)
-        
-        player = AVPlayer()
-        playerLayer = AVPlayerLayer(player: player)
-        player?.replaceCurrentItem(with: playerItem)
-        
-        playerLayer?.videoGravity = .resizeAspectFill
-        playerLayer?.frame = playerView.frame
-        
-        setPlayerUI(asset: asset)
-        getSubtitleInfo(asset: asset)
-        
-        guard let playerLayer = playerLayer else { return }
-        playerView.layer.addSublayer(playerLayer)
-        
-        addPeriodicTimeObserver()
+//    private func prepareToPlay() {
+//        guard let asset = asset else { return }
+//
+//        let assetKeys = ["playable", "hasProtectedContent"]
+//        let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: assetKeys)
+//        playerItem.addObserver(self,
+//                               forKeyPath: #keyPath(AVPlayerItem.status),
+//                               options: [.old, .new],
+//                               context: &playerItemContext)
+//
+//        player = AVPlayer()
+//        playerLayer = AVPlayerLayer(player: player)
+//        player?.replaceCurrentItem(with: playerItem)
+//
+//        playerLayer?.videoGravity = .resizeAspectFill
+//
+//        // PlayerView에서 준비할 것들.
+//        playerLayer?.frame = playerView.frame
+//
+//        setPlayerUI(asset: asset)
+//        getSubtitleInfo(asset: asset)
+//
+//        guard let playerLayer = playerLayer else { return }
+//        playerView.layer.addSublayer(playerLayer)
+//
+//        addPeriodicTimeObserver()
+//    }
+//
+//    private func addPeriodicTimeObserver() {
+//        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+//
+//        timeObserverToken = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
+//            self?.currentTimeLabel.text = time.seconds.toTimeFormat
+//
+//            guard let timeSliderMaximumValue = self?.timeSlider.maximumValue,
+//                let assetDuration = self?.player?.currentItem?.duration.seconds else { return }
+//            let value = timeSliderMaximumValue * Float(time.seconds / assetDuration)
+//            self?.timeSlider.setValue(value, animated: true)
+//        })
+//    }
+//
+//    private func removePeriodicTimeObserver() {
+//        guard let timeObserverToken = timeObserverToken else { return }
+//        player?.removeTimeObserver(timeObserverToken)
+//        self.timeObserverToken = nil
+//    }
+//
+//    private func play() {
+//        playButton.isSelected = true
+//
+//        player?.play()
+//
+//        guard isVisible else { return }
+//        let workItem = DispatchWorkItem { [weak self] in
+//            self?.fadeOutUI()
+//        }
+//        workItemArray.append(workItem)
+//        workItem.notify(queue: .main) {
+//
+//        }
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+//    }
+//
+//    private func pause() {
+//        playButton.isSelected = false
+//
+//        player?.pause()
+//
+//        guard isVisible else { return }
+//        let workItem = DispatchWorkItem { [weak self] in
+//            self?.fadeOutUI()
+//        }
+//        workItemArray.append(workItem)
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+//    }
+//
+//    private func changeTenSeconds(to direction: Direction) {
+//        guard let currentTimeSeconds = player?.currentTime().seconds else { return }
+//        let timeToBeChanged: CMTime = {
+//            switch direction {
+//            case .back:
+//                return CMTime(seconds: currentTimeSeconds - 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+//            case .forward:
+//                return CMTime(seconds: currentTimeSeconds + 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+//            }
+//        }()
+//
+//        player?.seek(to: timeToBeChanged,
+//                     toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero) { [weak self] _ in
+//            guard let isPlaying = self?.player?.isPlaying else { return }
+//            switch isPlaying {
+//            case true:
+//                self?.play()
+//            case false:
+//                self?.pause()
+//            }
+//        }
+//    }
+//
+//    private func stopPlayingAndSeekSmoothlyToTime(newChaseTime:CMTime) {
+//        if CMTimeCompare(newChaseTime, chaseTime) != 0 {
+//            chaseTime = newChaseTime;
+//
+//            if !isSeekInProgress {
+//                trySeekToChaseTime()
+//            }
+//        }
+//    }
+//
+//    private func trySeekToChaseTime() {
+//        guard playerItemStatus == .readyToPlay else { return }
+//        actuallySeekToTime()
+//    }
+//
+//    private func actuallySeekToTime() {
+//        isSeekInProgress = true
+//        let seekTimeInProgress = chaseTime
+//        player?.seek(to: seekTimeInProgress,
+//                     toleranceBefore: kCMTimeZero,
+//                     toleranceAfter: kCMTimeZero) { [weak self] isFinished in
+//                        guard let strongSelf = self else { return }
+//                        if CMTimeCompare(seekTimeInProgress, strongSelf.chaseTime) == 0 {
+//                            strongSelf.isSeekInProgress = false
+//                        } else {
+//                            strongSelf.trySeekToChaseTime()
+//                        }
+//
+//                        guard let isPlaying = self?.player?.isPlaying else { return }
+//                        switch isPlaying {
+//                        case true:
+//                            self?.play()
+//                        case false:
+//                            self?.pause()
+//                        }
+//        }
+//    }
+}
+
+extension PlayerViewController: PlayerManagerDelegate {
+    func isPlayedFirst() {
+        <#code#>
     }
     
-    private func addPeriodicTimeObserver() {
-        let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-        
-        timeObserverToken = player?.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
-            self?.currentTimeLabel.text = time.seconds.toTimeFormat
-            
-            guard let timeSliderMaximumValue = self?.timeSlider.maximumValue,
-                let assetDuration = self?.player?.currentItem?.duration.seconds else { return }
-            let value = timeSliderMaximumValue * Float(time.seconds / assetDuration)
-            self?.timeSlider.setValue(value, animated: true)
-        })
+    func setTimeObserverValue(time: CMTime) {
+        <#code#>
     }
     
-    private func removePeriodicTimeObserver() {
-        guard let timeObserverToken = timeObserverToken else { return }
-        player?.removeTimeObserver(timeObserverToken)
-        self.timeObserverToken = nil
+    func playerPlayed() {
+        <#code#>
     }
     
-    private func play() {
-        playButton.isSelected = true
-        
-        player?.play()
-        
-        guard isVisible else { return }
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.fadeOutUI()
-        }
-        workItemArray.append(workItem)
-        workItem.notify(queue: .main) {
-            
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
-    }
-    
-    private func pause() {
-        playButton.isSelected = false
-        
-        player?.pause()
-        
-        guard isVisible else { return }
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.fadeOutUI()
-        }
-        workItemArray.append(workItem)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
-    }
-    
-    private func changeTenSeconds(to direction: Direction) {
-        guard let currentTimeSeconds = player?.currentTime().seconds else { return }
-        let timeToBeChanged: CMTime = {
-            switch direction {
-            case .back:
-                return CMTime(seconds: currentTimeSeconds - 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-            case .forward:
-                return CMTime(seconds: currentTimeSeconds + 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-            }
-        }()
-        
-        player?.seek(to: timeToBeChanged,
-                     toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero) { [weak self] _ in
-            guard let isPlaying = self?.player?.isPlaying else { return }
-            switch isPlaying {
-            case true:
-                self?.play()
-            case false:
-                self?.pause()
-            }
-        }
-    }
-    
-    private func stopPlayingAndSeekSmoothlyToTime(newChaseTime:CMTime) {
-        if CMTimeCompare(newChaseTime,chaseTime) != 0 {
-            chaseTime = newChaseTime;
-            
-            if !isSeekInProgress {
-                trySeekToChaseTime()
-            }
-        }
-    }
-    
-    private func trySeekToChaseTime() {
-        guard playerItemStatus == .readyToPlay else { return }
-        actuallySeekToTime()
-    }
-    
-    private func actuallySeekToTime() {
-        isSeekInProgress = true
-        let seekTimeInProgress = chaseTime
-        player?.seek(to: seekTimeInProgress,
-                     toleranceBefore: kCMTimeZero,
-                     toleranceAfter: kCMTimeZero) { [weak self] isFinished in
-                        guard let strongSelf = self else { return }
-                        if CMTimeCompare(seekTimeInProgress, strongSelf.chaseTime) == 0 {
-                            strongSelf.isSeekInProgress = false
-                        } else {
-                            strongSelf.trySeekToChaseTime()
-                        }
-                        
-                        guard let isPlaying = self?.player?.isPlaying else { return }
-                        switch isPlaying {
-                        case true:
-                            self?.play()
-                        case false:
-                            self?.pause()
-                        }
-        }
+    func playerPaused() {
+        <#code#>
     }
 }
 
@@ -606,11 +582,11 @@ extension PlayerViewController: UITableViewDelegate {
                 if i == indexPath.row {
                     mediaSelectionDataSource.subtitlesArray[i] = (subtitleInfo.0, true)
                     
-                    if let group = asset?.mediaSelectionGroup(forMediaCharacteristic: .legible) {
+                    if let group = playerManager?.asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
                         guard let locale = subtitleInfo.0.getLocale() else { return }
                         let options = AVMediaSelectionGroup.mediaSelectionOptions(from: group.options, with: locale)
                         if let option = options.first {
-                            player?.currentItem?.select(option, in: group)
+                            playerManager?.player.currentItem?.select(option, in: group)
                         }
                     }
                 } else {
@@ -619,7 +595,7 @@ extension PlayerViewController: UITableViewDelegate {
             }
             break
         case false:
-            guard let playerItem = player?.currentItem else { return }
+            guard let playerItem = playerManager?.player.currentItem else { return }
             
             for i in mediaSelectionDataSource.resolutionsArray.indices {
                 let resolutionInfo = mediaSelectionDataSource.resolutionsArray[i]
