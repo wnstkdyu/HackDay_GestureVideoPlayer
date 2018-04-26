@@ -27,11 +27,7 @@ class PlayerViewController: UIViewController {
     // PlayerManager 인스턴스 - VideoListView에서 초기화 시켜줌
     var playerManager: PlayerManager?
     
-    private var isVisible: Bool = true {
-        didSet {
-            print("isVisible: \(isVisible)")
-        }
-    }
+    private var isVisible: Bool = true
     private var isLocked: Bool = false
     private var workItemArray: [DispatchWorkItem] = []
     
@@ -238,8 +234,6 @@ extension PlayerViewController: PlayerManagerDelegate {
         }
         
         workItemArray.append(workItem)
-        workItem.notify(queue: .main) {
-        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
     }
     
@@ -250,6 +244,18 @@ extension PlayerViewController: PlayerManagerDelegate {
         let workItem = DispatchWorkItem { [weak self] in
             self?.playerView.fadeOutUI()
         }
+        workItemArray.append(workItem)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+    }
+    
+    func playerEnded() {
+        playerView.playButton.isSelected = false
+        
+        guard isVisible else { return }
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.playerView.fadeOutUI()
+        }
+        
         workItemArray.append(workItem)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
     }

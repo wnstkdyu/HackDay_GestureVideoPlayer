@@ -39,7 +39,7 @@ class VideoModel: NSObject {
         
         let mediaSelectionGroup = asset.preferredMediaSelection
         print("asset의 미디어 셀렉션: \(mediaSelectionGroup)")
-        let mutableMediaSelection = mediaSelectionGroup.mutableCopy() as! AVMutableMediaSelection
+//        guard let mutableMediaSelection = mediaSelectionGroup.mutableCopy() as? AVMutableMediaSelection else { return }
         
         downloadTask = downloadSession.makeAssetDownloadTask(asset: asset,
                                                              assetTitle: " ",

@@ -14,6 +14,7 @@ protocol PlayerManagerDelegate: class {
     func setTimeObserverValue(time: CMTime)
     func playerPlayed()
     func playerPaused()
+    func playerEnded()
 }
 
 class PlayerManager: NSObject {
@@ -92,6 +93,9 @@ class PlayerManager: NSObject {
         let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
             self?.delegate?.setTimeObserverValue(time: time)
+            
+            guard time == self?.asset.duration else { return }
+            self?.delegate?.playerEnded()
         })
     }
     
