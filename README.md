@@ -1,5 +1,8 @@
 # HackDay_GestureVideoPlayer
 
+## [앞으로 할 일](https://github.com/wnstkdyu/HackDay_GestureVideoPlayer/blob/develop/ToDoList.md)
+공부하고 정리하자.
+
 ## 데모 영상
 [![Video Label](http://img.youtube.com/vi/F3nACRtB1TY/0.jpg)](https://youtu.be/F3nACRtB1TY)
 

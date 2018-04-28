@@ -226,7 +226,7 @@ extension PlayerViewController: PlayerManagerDelegate {
     }
     
     func playerPlayed() {
-        playerView.playButton.isSelected = true
+        playerView.playButton.setState(playState: .play)
         
         guard isVisible else { return }
         let workItem = DispatchWorkItem { [weak self] in
@@ -238,7 +238,7 @@ extension PlayerViewController: PlayerManagerDelegate {
     }
     
     func playerPaused() {
-        playerView.playButton.isSelected = false
+        playerView.playButton.setState(playState: .pause)
         
         guard isVisible else { return }
         let workItem = DispatchWorkItem { [weak self] in
@@ -249,7 +249,7 @@ extension PlayerViewController: PlayerManagerDelegate {
     }
     
     func playerEnded() {
-        playerView.playButton.isSelected = false
+        playerView.playButton.setState(playState: .replay)
         
         guard isVisible else { return }
         let workItem = DispatchWorkItem { [weak self] in
@@ -266,16 +266,18 @@ extension PlayerViewController: PlayerViewDelegate {
         navigationController?.popViewController(animated: true)
     }
     
-    func playButtonTapped(isSelected: Bool) {
-        switch isSelected {
-        case true:
+    func playButtonTapped(beforeState: PlayState) {
+        switch beforeState {
+        case .play:
             playerManager?.pause()
-        case false:
+        case .pause:
             playerManager?.play()
+        case .replay:
+            playerManager?.replay()
         }
     }
     
-    func replayButtonTapped() {
+    func backwardButtonTapped() {
         playerManager?.changeTenSeconds(to: .back)
     }
     

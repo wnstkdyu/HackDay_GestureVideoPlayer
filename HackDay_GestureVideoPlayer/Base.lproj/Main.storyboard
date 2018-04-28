@@ -99,20 +99,20 @@
                                                     <action selector="backButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="s5o-6F-hnp"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y9M-Yx-YEx">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y9M-Yx-YEx" customClass="PlayButton" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target">
                                                 <rect key="frame" x="309.5" y="163" width="48" height="48"/>
                                                 <gestureRecognizers/>
                                                 <state key="normal" image="ic_play_arrow_white_48pt"/>
                                                 <state key="selected" image="ic_pause_white_48pt"/>
                                                 <connections>
-                                                    <action selector="playButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="49D-mF-ori"/>
+                                                    <action selector="playButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="5KP-YM-49y"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nt-Ff-rn0" userLabel="Replay Button">
                                                 <rect key="frame" x="221" y="163" width="48" height="48"/>
                                                 <state key="normal" image="ic_replay_10_white_48pt"/>
                                                 <connections>
-                                                    <action selector="replayButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="1gG-jp-rRa"/>
+                                                    <action selector="backwardButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="1gG-jp-rRa"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fKa-fm-WWY" userLabel="Forward Button">

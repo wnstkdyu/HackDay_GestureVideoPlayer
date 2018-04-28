@@ -11,8 +11,8 @@ import AVFoundation
 
 protocol PlayerViewDelegate: class {
     func backButtonTapped()
-    func playButtonTapped(isSelected: Bool)
-    func replayButtonTapped()
+    func playButtonTapped(beforeState: PlayState)
+    func backwardButtonTapped()
     func forwardButtonTapped()
     func timeSliderValueChanged(value: Float)
     func subtitleButtonTapped()
@@ -26,7 +26,7 @@ protocol PlayerViewDelegate: class {
 class PlayerView: UIView {
     @IBOutlet var outletCollection: [UIView]!
     @IBOutlet weak var backButton: UIButton!
-    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var playButton: PlayButton!
     @IBOutlet weak var lockButton: UIButton!
     @IBOutlet weak var timeSlider: UISlider!
     @IBOutlet weak var currentTimeLabel: UILabel!
@@ -56,13 +56,13 @@ class PlayerView: UIView {
     @IBAction func backButtonTapped(_ sender: UIButton) {
         delegate?.backButtonTapped()
     }
-    
-    @IBAction func playButtonTapped(_ sender: UIButton) {
-        delegate?.playButtonTapped(isSelected: sender.isSelected)
+
+    @IBAction func playButtonTapped(_ sender: PlayButton) {
+        delegate?.playButtonTapped(beforeState: sender.playState)
     }
     
-    @IBAction func replayButtonTapped(_ sender: UIButton) {
-        delegate?.replayButtonTapped()
+    @IBAction func backwardButtonTapped(_ sender: UIButton) {
+        delegate?.backwardButtonTapped()
     }
     
     @IBAction func forwardButtonTapped(_ sender: UIButton) {

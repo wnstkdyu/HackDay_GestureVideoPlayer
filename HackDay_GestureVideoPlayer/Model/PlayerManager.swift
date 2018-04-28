@@ -81,6 +81,7 @@ class PlayerManager: NSObject {
                                forKeyPath: #keyPath(AVPlayerItem.status),
                                options: [.old, .new],
                                context: &playerItemContext)
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceivePlayerItmeEnded), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
         
         // Player와 PlayerLayer 준비
         player.replaceCurrentItem(with: playerItem)
@@ -105,6 +106,10 @@ class PlayerManager: NSObject {
         self.timeObserverToken = nil
     }
     
+    @objc private func didReceivePlayerItmeEnded() {
+        delegate?.playerEnded()
+    }
+    
     // MARK: 재생 관련
     func play() {
         player.play()
@@ -116,6 +121,13 @@ class PlayerManager: NSObject {
         player.pause()
         
         delegate?.playerPaused()
+    }
+    
+    func replay() {
+        // 처음으로 돌아가 player 플레이
+        player.seek(to: kCMTimeZero)
+        
+        play()
     }
     
     func changeTenSeconds(to direction: Direction) {
