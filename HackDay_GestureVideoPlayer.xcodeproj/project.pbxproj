@@ -21,6 +21,7 @@
 		7D5C0BD2208230E600601B93 /* MediaSelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5C0BD1208230E600601B93 /* MediaSelectionDataSource.swift */; };
 		7D824A60208E02AB0058E64A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D824A5F208E02AB0058E64A /* PlayerView.swift */; };
 		7D824A62208E06010058E64A /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D824A61208E06010058E64A /* PlayerManager.swift */; };
+		7D9DCE4B2096E004006A1ACD /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9DCE4A2096E004006A1ACD /* Enum.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		7D5C0BD1208230E600601B93 /* MediaSelectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaSelectionDataSource.swift; sourceTree = "<group>"; };
 		7D824A5F208E02AB0058E64A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		7D824A61208E06010058E64A /* PlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
+		7D9DCE4A2096E004006A1ACD /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,10 +75,10 @@
 			isa = PBXGroup;
 			children = (
 				7D1053F5207382D100880FF2 /* AppDelegate.swift */,
+				7D9DCE492096DF9B006A1ACD /* Helper */,
 				7D3E973A207B595000F42484 /* Model */,
 				7D10540A2073A81300880FF2 /* View */,
 				7D1054092073A80500880FF2 /* Controller */,
-				7D10540F2074A11D00880FF2 /* Supporting FIles */,
 				7D1053F9207382D100880FF2 /* Main.storyboard */,
 				7D1053FC207382D100880FF2 /* Assets.xcassets */,
 				7D1053FE207382D100880FF2 /* LaunchScreen.storyboard */,
@@ -105,22 +107,23 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		7D10540F2074A11D00880FF2 /* Supporting FIles */ = {
-			isa = PBXGroup;
-			children = (
-				7D1054102074A12E00880FF2 /* Extension.swift */,
-			);
-			path = "Supporting FIles";
-			sourceTree = "<group>";
-		};
 		7D3E973A207B595000F42484 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				7D3E973B207B596100F42484 /* VideoModel.swift */,
 				7D5C0BD1208230E600601B93 /* MediaSelectionDataSource.swift */,
-				7D824A61208E06010058E64A /* PlayerManager.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		7D9DCE492096DF9B006A1ACD /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				7D1054102074A12E00880FF2 /* Extension.swift */,
+				7D824A61208E06010058E64A /* PlayerManager.swift */,
+				7D9DCE4A2096E004006A1ACD /* Enum.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,6 +205,7 @@
 			files = (
 				7D824A62208E06010058E64A /* PlayerManager.swift in Sources */,
 				7D824A60208E02AB0058E64A /* PlayerView.swift in Sources */,
+				7D9DCE4B2096E004006A1ACD /* Enum.swift in Sources */,
 				7D10540C20748F2200880FF2 /* VideoListViewController.swift in Sources */,
 				7D1054112074A12E00880FF2 /* Extension.swift in Sources */,
 				7D5C0BD2208230E600601B93 /* MediaSelectionDataSource.swift in Sources */,

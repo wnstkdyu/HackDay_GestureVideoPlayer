@@ -134,7 +134,7 @@ class PlayerManager: NSObject {
         let currentTimeSeconds = player.currentTime().seconds
         let timeToBeChanged: CMTime = {
             switch direction {
-            case .back:
+            case .backward:
                 return CMTime(seconds: currentTimeSeconds - 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             case .forward:
                 return CMTime(seconds: currentTimeSeconds + 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))

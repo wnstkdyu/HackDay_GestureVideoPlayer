@@ -10,11 +10,6 @@ import UIKit
 import AVFoundation
 import CoreMedia
 
-enum Direction {
-    case back
-    case forward
-}
-
 class PlayerViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -278,7 +273,7 @@ extension PlayerViewController: PlayerViewDelegate {
     }
     
     func backwardButtonTapped() {
-        playerManager?.changeTenSeconds(to: .back)
+        playerManager?.changeTenSeconds(to: .backward)
     }
     
     func forwardButtonTapped() {

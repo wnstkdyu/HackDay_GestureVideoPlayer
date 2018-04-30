@@ -6,40 +6,6 @@
 //  Copyright © 2018년 Alpaca. All rights reserved.
 //
 
-enum Subtitle: String {
-    case korean = "Korean"
-    case english = "English"
-    case none = "자막 없음"
-    
-    func getLocale() -> Locale? {
-        switch self {
-        case .korean:
-            return Locale(identifier: "ko-KR")
-        case .english:
-            return Locale(identifier: "en-US")
-        case .none:
-            return nil
-        }
-    }
-}
-
-enum Resolution: String {
-    case high = "1080P"
-    case normal = "720P"
-    case low = "360P"
-    
-    func getPreferredBitRate() -> Double {
-        switch self {
-        case .high:
-            return 11000
-        case .normal:
-            return 4500
-        case .low:
-            return 600
-        }
-    }
-}
-
 import UIKit
 
 class MediaSelectionDataSource: NSObject, UITableViewDataSource {
