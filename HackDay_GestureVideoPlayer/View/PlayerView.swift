@@ -36,14 +36,10 @@ class PlayerView: UIView {
     
     @IBOutlet weak var centerTimeLabel: UILabel!
     
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        activityIndicator.frame = CGRect(origin: self.center, size: CGSize(width: 40, height: 40))
-        
-        return activityIndicator
-    }()
+    // MARK: Public Properties
+    public weak var delegate: PlayerViewDelegate?
     
-    lazy var expandingView: UIView = {
+    public lazy var expandingView: UIView = {
         let expandingView = UIView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.width / 2, height: self.frame.height)))
         expandingView.backgroundColor = currentTimeLabel.textColor
         expandingView.alpha = 0.5
@@ -51,8 +47,15 @@ class PlayerView: UIView {
         return expandingView
     }()
     
-    weak var delegate: PlayerViewDelegate?
+    // MARK: Private Properties
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        activityIndicator.frame = CGRect(origin: self.center, size: CGSize(width: 40, height: 40))
+        
+        return activityIndicator
+    }()
     
+    // MAKR: IBAction Methods
     @IBAction func backButtonTapped(_ sender: UIButton) {
         delegate?.backButtonTapped()
     }
@@ -86,12 +89,13 @@ class PlayerView: UIView {
         delegate?.resolutionButtonTapped()
     }
     
-    func changeToLandscape() {
+    // MARK: Public Methods
+    public func changeToLandscape() {
         let orientationValue = UIDeviceOrientation.landscapeRight.rawValue
         UIDevice.current.setValue(orientationValue, forKey: "orientation")
     }
     
-    func setPlayerUI(asset: AVAsset) {
+    public func setPlayerUI(asset: AVAsset) {
         totalTimeLabel.text = asset.duration.toTimeForamt
         if asset.duration.seconds / 3600 > 0 {
             currentTimeLabel.text = "00:00:00"
@@ -100,36 +104,19 @@ class PlayerView: UIView {
         }
     }
     
-    func showUI() {
+    public func showUI() {
         outletCollection.filter { $0 != backButton }
             .forEach { $0.isHidden = false }
         hideActivityIndicator()
     }
     
-    func hideUI() {
+    public func hideUI() {
         outletCollection.filter { $0 != backButton }
             .forEach { $0.isHidden = true }
         showActivityIndicator()
-        
-//        delegate?.isVisibleChange(to: false)
     }
     
-    func showActivityIndicator() {
-        guard !activityIndicator.isDescendant(of: self) else {
-            activityIndicator.startAnimating()
-            
-            return
-        }
-        
-        self.addSubview(activityIndicator)
-        activityIndicator.startAnimating()
-    }
-    
-    func hideActivityIndicator() {
-        activityIndicator.stopAnimating()
-    }
-    
-    func fadeInUI(isLocked: Bool = false) {
+    public func fadeInUI(isLocked: Bool = false) {
         outletCollection.filter { isLocked ? $0 == lockButton : true }
             .forEach { outlet in
                 UIView.animate(withDuration: 1.0,
@@ -161,7 +148,7 @@ class PlayerView: UIView {
         }
     }
     
-    func fadeOutUI(isLocked: Bool = false) {
+    public func fadeOutUI(isLocked: Bool = false) {
         outletCollection.filter { isLocked ? $0 != lockButton : true }
             .forEach { outlet in
                 UIView.animate(withDuration: 1.0,
@@ -188,7 +175,23 @@ class PlayerView: UIView {
         }
     }
     
-    func setLockUI(isLocked: Bool) {
+    // MARK: Private Methods
+    private func showActivityIndicator() {
+        guard !activityIndicator.isDescendant(of: self) else {
+            activityIndicator.startAnimating()
+            
+            return
+        }
+        
+        self.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+    }
+    
+    private func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
+    }
+    
+    private func setLockUI(isLocked: Bool) {
         delegate?.setLock(isLocked: isLocked)
         
         switch isLocked {

@@ -8,23 +8,27 @@
 
 import UIKit
 
-class MediaSelectionDataSource: NSObject, UITableViewDataSource {
+class MediaSelectionDataSource: NSObject {
+    // MARK: Public Properties
+    public var subtitlesArray: [(Subtitle, Bool)] = []
+    public var resolutionsArray: [(Resolution, Bool)] = [(.high, true), (.normal, false), (.low, false)]
     
-    var subtitlesArray: [(Subtitle, Bool)] = []
-    var resolutionsArray: [(Resolution, Bool)] = [(.high, true), (.normal, false), (.low, false)]
+    public var isSubtitle: Bool = true
     
-    var isSubtitle: Bool = true
-    
+    // MARK: Private Properties
     private let cellIdentifier = "MediaSelectionCell"
     
-    func setSubtitleDataSource() {
+    public func setSubtitleDataSource() {
         isSubtitle = true
     }
     
-    func setResolutionDataSource() {
+    public func setResolutionDataSource() {
         isSubtitle = false
     }
-    
+}
+
+extension MediaSelectionDataSource: UITableViewDataSource {
+    // MARK: UITableViewDataSource Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch isSubtitle {
         case true:
@@ -59,6 +63,4 @@ class MediaSelectionDataSource: NSObject, UITableViewDataSource {
         
         return cell
     }
-    
-    
 }

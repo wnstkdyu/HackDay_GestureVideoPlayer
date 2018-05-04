@@ -13,10 +13,11 @@ class VideoListViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    lazy private var videoModelList: [VideoModel] = []
-    var mediaSelectionMap: [AVAssetDownloadTask: AVMediaSelection] = [:]
+    // MARK: Private Properties
+    private lazy var videoModelList: [VideoModel] = []
+    private var mediaSelectionMap: [AVAssetDownloadTask: AVMediaSelection] = [:]
     private let downloadSessionIdentifier = "downloadSessionIdentifier"
-    lazy private var downloadSession: AVAssetDownloadURLSession = {
+    private lazy var downloadSession: AVAssetDownloadURLSession = {
         let configuration = URLSessionConfiguration.background(withIdentifier: downloadSessionIdentifier)
         configuration.allowsCellularAccess = false
         let downloadSession = AVAssetDownloadURLSession(configuration: configuration,
@@ -28,8 +29,9 @@ class VideoListViewController: UIViewController {
     
     private let cellIdentifier = "VideoListCell"
     
-    let videoURL: URL = URL(string: "https://devimages-cdn.apple.com/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8")!
+    let videoURL = URL(string: "https://devimages-cdn.apple.com/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8")
     
+    // MARK: Rotation Properties
     override var shouldAutorotate: Bool {
         return true
     }
@@ -38,6 +40,7 @@ class VideoListViewController: UIViewController {
         return [.portrait]
     }
     
+    // MARK: LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,7 +48,9 @@ class VideoListViewController: UIViewController {
         setCollectionViewItemSize()
     }
     
+    // MARK: Setup Methods
     private func createVideoModelList() {
+        guard let videoURL = videoURL else { return }
         videoModelList.append(VideoModel(remoteURL: videoURL))
         
         // UserDefaults에 저장해 놓은 localURL 확인 후 있다면 넣어 주기.
@@ -80,6 +85,7 @@ class VideoListViewController: UIViewController {
 }
 
 extension VideoListViewController: UICollectionViewDataSource {
+    // MARK: UICollectionViewDataSource Methods
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return videoModelList.count
     }
@@ -93,6 +99,7 @@ extension VideoListViewController: UICollectionViewDataSource {
 }
 
 extension VideoListViewController: UICollectionViewDelegate {
+    // MARK: UICollectionViewDelegate Methods
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let playerViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else { return }
         
@@ -108,6 +115,7 @@ extension VideoListViewController: UICollectionViewDelegate {
 }
 
 extension VideoListViewController: AVAssetDownloadDelegate {
+    // MARK: AVAssetDownloadDelegate Methods
     func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didFinishDownloadingTo location: URL) {
         guard let videoModel = (videoModelList.filter { $0.remoteURL == assetDownloadTask.urlAsset.url })
             .first else { return }

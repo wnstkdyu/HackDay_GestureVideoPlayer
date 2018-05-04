@@ -9,9 +9,9 @@
 import UIKit
 
 class PlayButton: UIButton {
-    var playState: PlayState = .play
+    public var playState: PlayState = .play
     
-    func setState(playState: PlayState) {
+    public func setState(playState: PlayState) {
         self.playState = playState
         
         setImage(playState.getImage(), for: .normal)

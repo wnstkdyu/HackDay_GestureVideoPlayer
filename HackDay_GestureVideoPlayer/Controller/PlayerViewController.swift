@@ -19,9 +19,10 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var tapGestureRecognizer: UITapGestureRecognizer!
     @IBOutlet weak var doubleTapGestureRecognizer: UITapGestureRecognizer!
     
-    // PlayerManager 인스턴스 - VideoListView에서 초기화 시켜줌
-    var playerManager: PlayerManager?
+    // MARK: Public Properties
+    public var playerManager: PlayerManager?
     
+    // MARK: Private Properties
     private var isVisible: Bool = true
     private var isLocked: Bool = false
     private var workItemArray: [DispatchWorkItem] = []
@@ -32,7 +33,7 @@ class PlayerViewController: UIViewController {
     
     private var mediaSelectionDataSource = MediaSelectionDataSource()
     
-    // 화면 회전관련 변수 오버라이드
+    // MARK: Rotation Properties
     override var shouldAutorotate: Bool {
         return true
     }
@@ -41,6 +42,7 @@ class PlayerViewController: UIViewController {
         return [.landscape]
     }
     
+    // MARK: LifeCycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -60,10 +62,14 @@ class PlayerViewController: UIViewController {
         playerView.changeToLandscape()
     }
     
-    // 화면 크기가 다 결정되고 나서 해야 비디오가 꽉 차게 나옴.
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
+        setUpPlayback()
+    }
+    
+    // MARK: Setup Methods
+    private func setUpPlayback() {
         playerManager?.prepareToPlay()
         
         // PlayerView에서 준비할 것들.
@@ -72,11 +78,29 @@ class PlayerViewController: UIViewController {
         guard let asset = playerManager?.asset else { return }
         playerView.setPlayerUI(asset: asset)
         getSubtitleInfo(asset: asset)
-
+        
         guard let playerLayer = playerManager?.playerLayer else { return }
         playerView.layer.sublayers?.insert(playerLayer, at: 0)
     }
     
+    private func getSubtitleInfo(asset: AVAsset) {
+        if let group = asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
+            for option in group.options {
+                switch option.displayName {
+                case "Korean":
+                    mediaSelectionDataSource.subtitlesArray.append((.korean, false))
+                case "English":
+                    mediaSelectionDataSource.subtitlesArray.append((.english, false))
+                default:
+                    continue
+                }
+            }
+        }
+        
+        mediaSelectionDataSource.subtitlesArray.append((.none, true))
+    }
+    
+    // MARK: IBAction Methods
     @IBAction func handleTapGesture(_ sender: UITapGestureRecognizer) {
         workItemArray.forEach { $0.cancel() }
         hideMediaSelectionTableView()
@@ -168,23 +192,7 @@ class PlayerViewController: UIViewController {
         }
     }
     
-    private func getSubtitleInfo(asset: AVAsset) {
-        if let group = asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
-            for option in group.options {
-                switch option.displayName {
-                case "Korean":
-                    mediaSelectionDataSource.subtitlesArray.append((.korean, false))
-                case "English":
-                    mediaSelectionDataSource.subtitlesArray.append((.english, false))
-                default:
-                    continue
-                }
-            }
-        }
-        
-        mediaSelectionDataSource.subtitlesArray.append((.none, true))
-    }
-    
+    // MARK: TableView UI Methods
     private func showMediaSelectionTableView() {
         playerView.outletCollection.forEach { $0.isHidden = true }
         
@@ -206,6 +214,7 @@ class PlayerViewController: UIViewController {
 }
 
 extension PlayerViewController: PlayerManagerDelegate {
+    // MARK: PlayerManagerDelegate Methods
     func isPlayedFirst() {
         playerView.showUI()
         playerManager?.play()
@@ -257,6 +266,7 @@ extension PlayerViewController: PlayerManagerDelegate {
 }
 
 extension PlayerViewController: PlayerViewDelegate {
+    // MARK: PlayerViewDelegate Methods
     func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -319,6 +329,7 @@ extension PlayerViewController: PlayerViewDelegate {
 }
 
 extension PlayerViewController: UIGestureRecognizerDelegate {
+    // MARK: UIGestureRecognizerDelegate Methods
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
 
         guard let touchView = touch.view,
@@ -336,12 +347,14 @@ extension PlayerViewController: UIGestureRecognizerDelegate {
 }
 
 extension PlayerViewController: UIScrollViewDelegate {
+    // MARK: UIScrollViewDelegate Methods
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return playerView
     }
 }
 
 extension PlayerViewController: UITableViewDelegate {
+    // MARK: UITableViewDelegate Methods
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         cell?.accessoryType = .checkmark

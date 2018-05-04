@@ -21,7 +21,7 @@ class NavigationController: UINavigationController {
         
         return topViewController.supportedInterfaceOrientations
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

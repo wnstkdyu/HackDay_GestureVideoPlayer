@@ -10,20 +10,25 @@ import Foundation
 import AVFoundation
 
 class VideoModel: NSObject {
-    var title: String {
+    // MARK: Public Properties
+    public var title: String {
         return remoteURL.lastPathComponent
     }
     
-    let remoteURL: URL
-    var localURL: URL?
-    var asset: AVURLAsset?
-    var downloadTask: AVAssetDownloadTask?
+    public let remoteURL: URL
+    public var localURL: URL?
+    public var asset: AVURLAsset?
+    
+    // MARK: Private Properties
+    private var downloadTask: AVAssetDownloadTask?
+    
+    private let minimumBitrate: Int = 2000000
     
     init(remoteURL: URL) {
         self.remoteURL = remoteURL
     }
     
-    func setUpAssetDownload(downloadSession: AVAssetDownloadURLSession) {
+    public func setUpAssetDownload(downloadSession: AVAssetDownloadURLSession) {
         asset = AVURLAsset(url: remoteURL)
         guard let asset = asset else { return }
         
@@ -43,12 +48,8 @@ class VideoModel: NSObject {
         downloadTask = downloadSession.makeAssetDownloadTask(asset: asset,
                                                              assetTitle: " ",
                                                              assetArtworkData: nil,
-                                                             options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: 2000000])
+                                                             options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: minimumBitrate])
         
         downloadTask?.resume()
     }
-}
-
-extension VideoModel: AVAssetDownloadDelegate {
-    
 }

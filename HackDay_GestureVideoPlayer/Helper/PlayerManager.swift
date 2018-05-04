@@ -18,15 +18,17 @@ protocol PlayerManagerDelegate: class {
 }
 
 class PlayerManager: NSObject {
-    weak var delegate: PlayerManagerDelegate?
+    // MARK: Public Properties
+    public weak var delegate: PlayerManagerDelegate?
     
-    var asset: AVAsset
-    var player: AVPlayer
-    var playerLayer: AVPlayerLayer
+    public var asset: AVAsset
+    public var player: AVPlayer
+    public var playerLayer: AVPlayerLayer
     
+    // MARK: Private Properties
     private var playerItemContext = 0
     private var playerItemStatus: AVPlayerItemStatus = .unknown
-    var isFirstPlaying: Bool = true
+    private var isFirstPlaying: Bool = true
     
     private var timeObserverToken: Any?
     
@@ -72,8 +74,8 @@ class PlayerManager: NSObject {
         }
     }
     
-    // MARK: 재생 준비
-    func prepareToPlay() {
+    // MARK: Prepare Playback
+    public func prepareToPlay() {
         // PlayerItem 초기화
         let assetKeys = ["playable", "hasProtectedContent"]
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: assetKeys)
@@ -110,27 +112,26 @@ class PlayerManager: NSObject {
         delegate?.playerEnded()
     }
     
-    // MARK: 재생 관련
-    func play() {
+    // MARK: Playback Method
+    public func play() {
         player.play()
         
         delegate?.playerPlayed()
     }
     
-    func pause() {
+    public func pause() {
         player.pause()
         
         delegate?.playerPaused()
     }
     
-    func replay() {
-        // 처음으로 돌아가 player 플레이
+    public func replay() {
         player.seek(to: kCMTimeZero)
         
         play()
     }
     
-    func changeTenSeconds(to direction: Direction) {
+    public func changeTenSeconds(to direction: Direction) {
         let currentTimeSeconds = player.currentTime().seconds
         let timeToBeChanged: CMTime = {
             switch direction {
@@ -153,8 +154,8 @@ class PlayerManager: NSObject {
         }
     }
     
-    // MARK: TimeSlier ValueChanged 관련
-    func stopPlayingAndSeekSmoothlyToTime(newChaseTime: CMTime) {
+    // MARK: TimeSlider ValueChanged
+    public func stopPlayingAndSeekSmoothlyToTime(newChaseTime: CMTime) {
         if CMTimeCompare(newChaseTime, chaseTime) != 0 {
             chaseTime = newChaseTime
             
@@ -185,9 +186,9 @@ class PlayerManager: NSObject {
                         guard let isPlaying = self?.player.isPlaying else { return }
                         switch isPlaying {
                         case true:
-                            self?.play()
+                            strongSelf.play()
                         case false:
-                            self?.pause()
+                            strongSelf.pause()
                         }
         }
     }
