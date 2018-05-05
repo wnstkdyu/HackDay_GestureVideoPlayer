@@ -43,6 +43,7 @@ class PlayerManager: NSObject {
     
     deinit {
         removePeriodicTimeObserver()
+        removePlayerItemObserver()
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -106,6 +107,10 @@ class PlayerManager: NSObject {
         guard let timeObserverToken = timeObserverToken else { return }
         player.removeTimeObserver(timeObserverToken)
         self.timeObserverToken = nil
+    }
+    
+    private func removePlayerItemObserver() {
+        player.currentItem?.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), context: &playerItemContext)
     }
     
     @objc private func didReceivePlayerItmeEnded() {

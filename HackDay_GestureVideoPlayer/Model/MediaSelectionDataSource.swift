@@ -18,6 +18,7 @@ class MediaSelectionDataSource: NSObject {
     // MARK: Private Properties
     private let cellIdentifier = "MediaSelectionCell"
     
+    // MARK: Public Methods
     public func setSubtitleDataSource() {
         isSubtitle = true
     }
