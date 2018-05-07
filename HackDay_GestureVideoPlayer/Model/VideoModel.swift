@@ -37,7 +37,7 @@ class VideoModel: NSObject {
         if let group = asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
             // Print its options.
             for option in group.options {
-                print("  Option: \(option.displayName)")
+                print("Option: \(option.displayName)")
             }
         }
         

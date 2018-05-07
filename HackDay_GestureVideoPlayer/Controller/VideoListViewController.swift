@@ -29,6 +29,7 @@ class VideoListViewController: UIViewController {
     
     private let cellIdentifier = "VideoListCell"
     
+    let videoMockURLs: [URL?] = [URL(string: "https://devimages-cdn.apple.com/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8"), URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"), URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/bipbop_4x3_variant.m3u8"), URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8")]
     let videoURL = URL(string: "https://devimages-cdn.apple.com/samplecode/avfoundationMedia/AVFoundationQueuePlayer_HLS2/master.m3u8")
     
     // MARK: Rotation Properties
@@ -50,13 +51,13 @@ class VideoListViewController: UIViewController {
     
     // MARK: Setup Methods
     private func createVideoModelList() {
-        guard let videoURL = videoURL else { return }
-        videoModelList.append(VideoModel(remoteURL: videoURL))
+        videoMockURLs.forEach {
+            guard let videoURL = $0 else { return }
+            videoModelList.append(VideoModel(remoteURL: videoURL))
+        }
         
         // UserDefaults에 저장해 놓은 localURL 확인 후 있다면 넣어 주기.
-        for i in videoModelList.indices {
-            let videoModel = videoModelList[i]
-            
+        for videoModel in videoModelList {
             if let localURLString = UserDefaults.standard.object(forKey: videoModel.remoteURL.absoluteString) as? String {
                 let baseURL = URL(fileURLWithPath: NSHomeDirectory())
                 let localURL = baseURL.appendingPathComponent(localURLString)

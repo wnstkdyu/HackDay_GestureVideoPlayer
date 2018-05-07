@@ -55,7 +55,18 @@ class PlayerView: UIView {
         return activityIndicator
     }()
     
-    // MAKR: IBAction Methods
+    private let fadeDuration: TimeInterval = 1.0
+//    private lazy var fadeInAnimator: UIViewPropertyAnimator = {
+//        return UIViewPropertyAnimator(duration: fadeDuration, curve: .easeInOut) { [weak self] in
+//            guard let strongSelf = self else { return }
+//            
+//            strongSelf.outletCollection.forEach {
+//                $0.alpha = 1.0
+//            }
+//        }
+//    }()
+    
+    // MARK: IBAction Methods
     @IBAction func backButtonTapped(_ sender: UIButton) {
         delegate?.backButtonTapped()
     }
