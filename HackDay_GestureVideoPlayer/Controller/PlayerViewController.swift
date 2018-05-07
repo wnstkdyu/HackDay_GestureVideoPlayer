@@ -23,14 +23,14 @@ class PlayerViewController: UIViewController {
     public var playerManager: PlayerManager?
     
     // MARK: Private Properties
-    private var isVisible: Bool = true
+    private var uiVisibleState: UIVisibleState = .disappeared
     private var isLocked: Bool = false
-    private var workItemArray: [DispatchWorkItem] = []
     
     private var newCMTime: CMTime?
     private var firstBrightness: CGFloat?
     private var firstVolume: Float?
     
+    private let mediaSelectionTableViewShowingSpeed: TimeInterval = 0.3
     private var mediaSelectionDataSource = MediaSelectionDataSource()
     
     // MARK: Rotation Properties
@@ -46,33 +46,31 @@ class PlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        playerManager?.delegate = self
-        playerView.delegate = self
-        
-        tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
-        
-        mediaSelectionTableView.rowHeight = mediaSelectionTableView.frame.height / 3
-        mediaSelectionTableView.dataSource = mediaSelectionDataSource
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        setPlayback()
         
         playerView.hideUI()
         playerView.changeToLandscape()
+        
+        tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
+        
+        setMediaSelectionTableView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        setUpPlayback()
+        setPlayerUI()
     }
     
     // MARK: Setup Methods
-    private func setUpPlayback() {
+    private func setPlayback() {
         playerManager?.prepareToPlay()
         
-        // PlayerView에서 준비할 것들.
+        playerManager?.delegate = self
+        playerView.delegate = self
+    }
+    
+    private func setPlayerUI() {
         playerManager?.playerLayer.frame = playerView.frame
         
         guard let asset = playerManager?.asset else { return }
@@ -81,6 +79,11 @@ class PlayerViewController: UIViewController {
         
         guard let playerLayer = playerManager?.playerLayer else { return }
         playerView.layer.sublayers?.insert(playerLayer, at: 0)
+    }
+    
+    private func setMediaSelectionTableView() {
+        mediaSelectionTableView.rowHeight = mediaSelectionTableView.frame.height / 3
+        mediaSelectionTableView.dataSource = mediaSelectionDataSource
     }
     
     private func getSubtitleInfo(asset: AVAsset) {
@@ -102,12 +105,15 @@ class PlayerViewController: UIViewController {
     
     // MARK: IBAction Methods
     @IBAction func handleTapGesture(_ sender: UITapGestureRecognizer) {
-        workItemArray.forEach { $0.cancel() }
+        playerView.cancelAllAnimations()
         hideMediaSelectionTableView()
         
-        if isVisible {
+        switch uiVisibleState {
+        case .appeared, .appearing:
+            print("보이기 때문에 사라져랏")
             playerView.fadeOutUI(isLocked: isLocked)
-        } else {
+        case .disappeared, .disappearing:
+            print("안 보이기 때문에 나와랏")
             playerView.fadeInUI(isLocked: isLocked)
         }
     }
@@ -196,7 +202,7 @@ class PlayerViewController: UIViewController {
     private func showMediaSelectionTableView() {
         playerView.outletCollection.forEach { $0.isHidden = true }
         
-        UIView.animate(withDuration: 0.3) { [weak self] in
+        UIView.animate(withDuration: mediaSelectionTableViewShowingSpeed) { [weak self] in
             guard let tableViewFrame = self?.mediaSelectionTableView.frame,
                 let viewHeight = self?.view.frame.height else { return }
             self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
@@ -206,7 +212,7 @@ class PlayerViewController: UIViewController {
     private func hideMediaSelectionTableView() {
         playerView.outletCollection.forEach { $0.isHidden = false }
         
-        UIView.animate(withDuration: 0.3) { [weak self] in
+        UIView.animate(withDuration: mediaSelectionTableViewShowingSpeed) { [weak self] in
             guard let viewHeight = self?.view.frame.height else { return }
             self?.mediaSelectionTableView.frame.origin.y = viewHeight
         }
@@ -218,6 +224,8 @@ extension PlayerViewController: PlayerManagerDelegate {
     func isPlayedFirst() {
         playerView.showUI()
         playerManager?.play()
+        
+        playerView.fadeOutUI()
     }
     
     func setTimeObserverValue(time: CMTime) {
@@ -226,42 +234,32 @@ extension PlayerViewController: PlayerManagerDelegate {
         let timeSliderMaximumValue = playerView.timeSlider.maximumValue
         guard let assetDuration = playerManager?.player.currentItem?.duration.seconds else { return }
         let value = timeSliderMaximumValue * Float(time.seconds / assetDuration)
+        
         playerView.timeSlider.setValue(value, animated: true)
     }
     
     func playerPlayed() {
         playerView.playButton.setState(playState: .play)
         
-        guard isVisible else { return }
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.playerView.fadeOutUI()
-        }
-        
-        workItemArray.append(workItem)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+        guard uiVisibleState == .appeared || uiVisibleState == .appearing else { return }
+        playerView.showUI()
+        playerView.setTimer(isLocked: isLocked)
     }
     
     func playerPaused() {
         playerView.playButton.setState(playState: .pause)
         
-        guard isVisible else { return }
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.playerView.fadeOutUI()
-        }
-        workItemArray.append(workItem)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+        guard uiVisibleState == .appeared || uiVisibleState == .appearing else { return }
+        playerView.showUI()
+        playerView.setTimer(isLocked: isLocked)
     }
     
     func playerEnded() {
         playerView.playButton.setState(playState: .replay)
         
-        guard isVisible else { return }
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.playerView.fadeOutUI()
-        }
-        
-        workItemArray.append(workItem)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+        guard uiVisibleState == .appeared || uiVisibleState == .appearing else { return }
+        playerView.showUI()
+        playerView.setTimer(isLocked: isLocked)
     }
 }
 
@@ -272,6 +270,8 @@ extension PlayerViewController: PlayerViewDelegate {
     }
     
     func playButtonTapped(beforeState: PlayState) {
+        playerView.cancelAllAnimations()
+        
         switch beforeState {
         case .play:
             playerManager?.pause()
@@ -293,8 +293,8 @@ extension PlayerViewController: PlayerViewDelegate {
     func timeSliderValueChanged(value: Float) {
         let valueRatio = value / playerView.timeSlider.maximumValue
         
-        guard let totoalSeconds = playerManager?.player.currentItem?.duration.seconds else { return }
-        let currentTimeSeconds = Double(valueRatio) * totoalSeconds
+        guard let totalSeconds = playerManager?.player.currentItem?.duration.seconds else { return }
+        let currentTimeSeconds = Double(valueRatio) * totalSeconds
         let timeToBeChanged = CMTime(seconds: currentTimeSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         
         playerManager?.stopPlayingAndSeekSmoothlyToTime(newChaseTime: timeToBeChanged)
@@ -314,8 +314,8 @@ extension PlayerViewController: PlayerViewDelegate {
         showMediaSelectionTableView()
     }
     
-    func isVisibleChange(to isVisible: Bool) {
-        self.isVisible = isVisible
+    func uiVisibleStateChange(to uiVisibleState: UIVisibleState) {
+        self.uiVisibleState = uiVisibleState
     }
     
     func checkLockButton() {
@@ -324,7 +324,8 @@ extension PlayerViewController: PlayerViewDelegate {
     
     func setLock(isLocked: Bool) {
         self.isLocked = isLocked
-        workItemArray.forEach { $0.cancel() }
+        
+        playerView.cancelAllAnimations()
     }
 }
 

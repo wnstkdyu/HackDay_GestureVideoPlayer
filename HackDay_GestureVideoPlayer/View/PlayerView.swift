@@ -18,7 +18,7 @@ protocol PlayerViewDelegate: class {
     func subtitleButtonTapped()
     func resolutionButtonTapped()
     
-    func isVisibleChange(to isVisible: Bool)
+    func uiVisibleStateChange(to uiVisibleState: UIVisibleState)
     func checkLockButton()
     func setLock(isLocked: Bool)
 }
@@ -55,16 +55,9 @@ class PlayerView: UIView {
         return activityIndicator
     }()
     
-    private let fadeDuration: TimeInterval = 1.0
-//    private lazy var fadeInAnimator: UIViewPropertyAnimator = {
-//        return UIViewPropertyAnimator(duration: fadeDuration, curve: .easeInOut) { [weak self] in
-//            guard let strongSelf = self else { return }
-//            
-//            strongSelf.outletCollection.forEach {
-//                $0.alpha = 1.0
-//            }
-//        }
-//    }()
+    private let fadeDuration: TimeInterval = 0.5
+    private let fadeInterval: TimeInterval = 3.0
+    private var timer: Timer?
     
     // MARK: IBAction Methods
     @IBAction func backButtonTapped(_ sender: UIButton) {
@@ -108,7 +101,9 @@ class PlayerView: UIView {
     
     public func setPlayerUI(asset: AVAsset) {
         totalTimeLabel.text = asset.duration.toTimeForamt
-        if asset.duration.seconds / 3600 > 0 {
+        let secondsOfHour: Double = 3600
+        
+        if asset.duration.seconds / secondsOfHour > 0 {
             currentTimeLabel.text = "00:00:00"
         } else {
             currentTimeLabel.text = "00:00"
@@ -128,62 +123,51 @@ class PlayerView: UIView {
     }
     
     public func fadeInUI(isLocked: Bool = false) {
+        delegate?.uiVisibleStateChange(to: .appearing)
+        
         outletCollection.filter { isLocked ? $0 == lockButton : true }
             .forEach { outlet in
-                UIView.animate(withDuration: 1.0,
-                               delay: 0.0,
-                               options: [.curveEaseInOut, .allowUserInteraction, .beginFromCurrentState],
-                               animations: {
-                                outlet.alpha = 1.0
-                }, completion: { [weak self] _ in
-                    if isLocked {
-                        let workItem = DispatchWorkItem {
-                            UIView.animate(withDuration: 1.0,
-                                           animations: { [weak self] in
-                                            self?.lockButton.alpha = 0.0
-                                }, completion: { [weak self] _ in
-                                    self?.delegate?.isVisibleChange(to: false)
-                            })
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
-                    }
-                    guard outlet == self?.outletCollection.last else { return }
-                    self?.delegate?.isVisibleChange(to: true)
+                UIView.animate(withDuration: fadeDuration, delay: 0.0, options: [.allowUserInteraction], animations: {
+                    outlet.alpha = 1.0
+                }, completion: { [weak self] completed in
+                    guard let strongSelf = self else { return }
+                    guard completed else { return }
                     
-                    // isLocked일 경우 lockButton도 사라져야 함.
-                    let workItem = DispatchWorkItem {
-                        self?.delegate?.checkLockButton()
-                    }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+                    guard outlet == strongSelf.outletCollection.last else { return }
+                    strongSelf.delegate?.uiVisibleStateChange(to: .appeared)
+                    
+                    strongSelf.timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { _ in
+                        strongSelf.fadeOutUI(isLocked: isLocked)
+                    })
                 })
         }
     }
     
-    public func fadeOutUI(isLocked: Bool = false) {
+    public func fadeOutUI(delay: TimeInterval = 0.0, isLocked: Bool = false) {
         outletCollection.filter { isLocked ? $0 != lockButton : true }
             .forEach { outlet in
-                UIView.animate(withDuration: 1.0,
-                               delay: 0.0,
-                               options: [.curveEaseInOut, .allowUserInteraction, .beginFromCurrentState],
-                               animations: {
-                                outlet.alpha = 0.0
-                }, completion: { [weak self] _ in
-                    if isLocked {
-                        let workItem = DispatchWorkItem {
-                            UIView.animate(withDuration: 1.0,
-                                           animations: { [weak self] in
-                                            self?.lockButton.alpha = 0.0
-                                }, completion: { [weak self] _ in
-                                    self?.delegate?.isVisibleChange(to: false)
-                            })
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
-                    }
-                    guard outlet == self?.outletCollection.last else { return }
+                UIView.animate(withDuration: fadeDuration, delay: delay, options: [.allowUserInteraction], animations: {
+                    outlet.alpha = 0.0
+                }, completion: { [weak self] completed in
+                    guard let strongSelf = self else { return }
+                    strongSelf.delegate?.uiVisibleStateChange(to: .disappearing)
+                    guard completed else { return }
                     
-                    self?.delegate?.isVisibleChange(to: false)
+                    guard outlet == strongSelf.outletCollection.last else { return }
+                    strongSelf.delegate?.uiVisibleStateChange(to: .disappeared)
                 })
         }
+    }
+    
+    public func cancelAllAnimations() {
+        timer?.invalidate()
+        outletCollection.forEach { $0.layer.removeAllAnimations() }
+    }
+    
+    public func setTimer(isLocked: Bool) {
+        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { [weak self] _ in
+            self?.fadeOutUI()
+        })
     }
     
     // MARK: Private Methods

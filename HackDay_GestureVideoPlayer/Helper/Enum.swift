@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum Subtitle: String {
+public enum Subtitle: String {
     case korean = "Korean"
     case english = "English"
     case none = "자막 없음"
@@ -25,7 +25,7 @@ enum Subtitle: String {
     }
 }
 
-enum Resolution: String {
+public enum Resolution: String {
     case high = "1080P"
     case normal = "720P"
     case low = "360P"
@@ -42,7 +42,7 @@ enum Resolution: String {
     }
 }
 
-enum PlayState {
+public enum PlayState {
     case play
     case pause
     case replay
@@ -59,7 +59,14 @@ enum PlayState {
     }
 }
 
-enum Direction {
+public enum Direction {
     case backward
     case forward
+}
+
+public enum UIVisibleState {
+    case appeared
+    case disappeared
+    case appearing
+    case disappearing
 }
