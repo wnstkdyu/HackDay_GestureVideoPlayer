@@ -364,10 +364,10 @@ extension PlayerViewController: UITableViewDelegate {
         
         switch mediaSelectionDataSource.isSubtitle {
         case true:
-            for i in mediaSelectionDataSource.subtitlesArray.indices {
-                let subtitleInfo = mediaSelectionDataSource.subtitlesArray[i]
-                if i == indexPath.row {
-                    mediaSelectionDataSource.subtitlesArray[i] = (subtitleInfo.0, true)
+            for index in mediaSelectionDataSource.subtitlesArray.indices {
+                let subtitleInfo = mediaSelectionDataSource.subtitlesArray[index]
+                if index == indexPath.row {
+                    mediaSelectionDataSource.subtitlesArray[index] = (subtitleInfo.0, true)
                     
                     if let group = playerManager?.asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
                         guard let locale = subtitleInfo.0.getLocale() else { return }
@@ -377,20 +377,19 @@ extension PlayerViewController: UITableViewDelegate {
                         }
                     }
                 } else {
-                    mediaSelectionDataSource.subtitlesArray[i] = (subtitleInfo.0, false)
+                    mediaSelectionDataSource.subtitlesArray[index] = (subtitleInfo.0, false)
                 }
             }
-            break
         case false:
             guard let playerItem = playerManager?.player.currentItem else { return }
             
-            for i in mediaSelectionDataSource.resolutionsArray.indices {
-                let resolutionInfo = mediaSelectionDataSource.resolutionsArray[i]
-                if i == indexPath.row {
-                    mediaSelectionDataSource.resolutionsArray[i] = (resolutionInfo.0, true)
+            for index in mediaSelectionDataSource.resolutionsArray.indices {
+                let resolutionInfo = mediaSelectionDataSource.resolutionsArray[index]
+                if index == indexPath.row {
+                    mediaSelectionDataSource.resolutionsArray[index] = (resolutionInfo.0, true)
                     playerItem.preferredPeakBitRate = resolutionInfo.0.getPreferredBitRate()
                 } else {
-                    mediaSelectionDataSource.resolutionsArray[i] = (resolutionInfo.0, false)
+                    mediaSelectionDataSource.resolutionsArray[index] = (resolutionInfo.0, false)
                 }
             }
         }

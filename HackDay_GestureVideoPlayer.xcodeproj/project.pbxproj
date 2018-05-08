@@ -17,6 +17,7 @@
 		7D3E97352077148800F42484 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3E97342077148800F42484 /* NavigationController.swift */; };
 		7D3E973C207B596100F42484 /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3E973B207B596100F42484 /* VideoModel.swift */; };
 		7D3E973E207B8CB500F42484 /* VideoListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3E973D207B8CB500F42484 /* VideoListCell.swift */; };
+		7D43648720A1D7BE00A3D75A /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 7D43648620A1D7BE00A3D75A /* .swiftlint.yml */; };
 		7D58DA982091D655007CF650 /* PlayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D58DA972091D655007CF650 /* PlayButton.swift */; };
 		7D5C0BD2208230E600601B93 /* MediaSelectionDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5C0BD1208230E600601B93 /* MediaSelectionDataSource.swift */; };
 		7D824A60208E02AB0058E64A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D824A5F208E02AB0058E64A /* PlayerView.swift */; };
@@ -40,6 +41,7 @@
 		7D3E97342077148800F42484 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		7D3E973B207B596100F42484 /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		7D3E973D207B8CB500F42484 /* VideoListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListCell.swift; sourceTree = "<group>"; };
+		7D43648620A1D7BE00A3D75A /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
 		7D58DA972091D655007CF650 /* PlayButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayButton.swift; sourceTree = "<group>"; };
 		7D5C0BD1208230E600601B93 /* MediaSelectionDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaSelectionDataSource.swift; sourceTree = "<group>"; };
 		7D824A5F208E02AB0058E64A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 				7D1053FC207382D100880FF2 /* Assets.xcassets */,
 				7D1053FE207382D100880FF2 /* LaunchScreen.storyboard */,
 				7D105401207382D100880FF2 /* Info.plist */,
+				7D43648620A1D7BE00A3D75A /* .swiftlint.yml */,
 			);
 			path = HackDay_GestureVideoPlayer;
 			sourceTree = "<group>";
@@ -161,6 +164,7 @@
 				7D1053EE207382D100880FF2 /* Sources */,
 				7D1053EF207382D100880FF2 /* Frameworks */,
 				7D1053F0207382D100880FF2 /* Resources */,
+				7D43648520A1D69C00A3D75A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -215,6 +219,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D43648720A1D7BE00A3D75A /* .swiftlint.yml in Resources */,
 				7D105400207382D100880FF2 /* LaunchScreen.storyboard in Resources */,
 				7D1053FD207382D100880FF2 /* Assets.xcassets in Resources */,
 				7D1053FB207382D100880FF2 /* Main.storyboard in Resources */,
@@ -224,6 +229,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		7D43648520A1D69C00A3D75A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint";
+		};
 		C4398999C982ABEA38488663 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

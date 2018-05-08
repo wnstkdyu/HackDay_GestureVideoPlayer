@@ -32,7 +32,6 @@ class VideoModel: NSObject {
         asset = AVURLAsset(url: remoteURL)
         guard let asset = asset else { return }
         
-            
         // Retrieve the AVMediaSelectionGroup for the specified characteristic.
         if let group = asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
             // Print its options.

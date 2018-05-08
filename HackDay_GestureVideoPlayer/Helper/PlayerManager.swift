@@ -80,6 +80,7 @@ class PlayerManager: NSObject {
         // PlayerItem 초기화
         let assetKeys = ["playable", "hasProtectedContent"]
         let playerItem = AVPlayerItem(asset: asset, automaticallyLoadedAssetKeys: assetKeys)
+        
         playerItem.addObserver(self,
                                forKeyPath: #keyPath(AVPlayerItem.status),
                                options: [.old, .new],
@@ -182,7 +183,7 @@ class PlayerManager: NSObject {
         let seekTimeInProgress = chaseTime
         player.seek(to: seekTimeInProgress,
                     toleranceBefore: kCMTimeZero,
-                    toleranceAfter: kCMTimeZero) { [weak self] isFinished in
+                    toleranceAfter: kCMTimeZero) { [weak self] _ in
                         guard let strongSelf = self else { return }
                         if CMTimeCompare(seekTimeInProgress, strongSelf.chaseTime) == 0 {
                             strongSelf.isSeekInProgress = false
