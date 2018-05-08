@@ -22,9 +22,12 @@
 		7D824A60208E02AB0058E64A /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D824A5F208E02AB0058E64A /* PlayerView.swift */; };
 		7D824A62208E06010058E64A /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D824A61208E06010058E64A /* PlayerManager.swift */; };
 		7D9DCE4B2096E004006A1ACD /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9DCE4A2096E004006A1ACD /* Enum.swift */; };
+		CA348CEF660255F3EFB3E991 /* Pods_HackDay_GestureVideoPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CEBC81CD9B8583778C5D8FE /* Pods_HackDay_GestureVideoPlayer.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4746D2F41B9359826209B9CC /* Pods-HackDay_GestureVideoPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HackDay_GestureVideoPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-HackDay_GestureVideoPlayer/Pods-HackDay_GestureVideoPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		6CEBC81CD9B8583778C5D8FE /* Pods_HackDay_GestureVideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HackDay_GestureVideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1053F2207382D100880FF2 /* HackDay_GestureVideoPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackDay_GestureVideoPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D1053F5207382D100880FF2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D1053FA207382D100880FF2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -42,6 +45,7 @@
 		7D824A5F208E02AB0058E64A /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		7D824A61208E06010058E64A /* PlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
 		7D9DCE4A2096E004006A1ACD /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
+		EA36DE22125F86546512DAF9 /* Pods-HackDay_GestureVideoPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HackDay_GestureVideoPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HackDay_GestureVideoPlayer/Pods-HackDay_GestureVideoPlayer.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA348CEF660255F3EFB3E991 /* Pods_HackDay_GestureVideoPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,6 +65,8 @@
 			children = (
 				7D1053F4207382D100880FF2 /* HackDay_GestureVideoPlayer */,
 				7D1053F3207382D100880FF2 /* Products */,
+				A2896BC3325483B37B09E0AD /* Pods */,
+				ED869D599960FC02F03C7B09 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,6 +133,23 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		A2896BC3325483B37B09E0AD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EA36DE22125F86546512DAF9 /* Pods-HackDay_GestureVideoPlayer.debug.xcconfig */,
+				4746D2F41B9359826209B9CC /* Pods-HackDay_GestureVideoPlayer.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		ED869D599960FC02F03C7B09 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6CEBC81CD9B8583778C5D8FE /* Pods_HackDay_GestureVideoPlayer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -133,6 +157,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D105404207382D100880FF2 /* Build configuration list for PBXNativeTarget "HackDay_GestureVideoPlayer" */;
 			buildPhases = (
+				C4398999C982ABEA38488663 /* [CP] Check Pods Manifest.lock */,
 				7D1053EE207382D100880FF2 /* Sources */,
 				7D1053EF207382D100880FF2 /* Frameworks */,
 				7D1053F0207382D100880FF2 /* Resources */,
@@ -197,6 +222,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C4398999C982ABEA38488663 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HackDay_GestureVideoPlayer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		7D1053EE207382D100880FF2 /* Sources */ = {
@@ -349,6 +395,7 @@
 		};
 		7D105405207382D100880FF2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA36DE22125F86546512DAF9 /* Pods-HackDay_GestureVideoPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -365,6 +412,7 @@
 		};
 		7D105406207382D100880FF2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4746D2F41B9359826209B9CC /* Pods-HackDay_GestureVideoPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

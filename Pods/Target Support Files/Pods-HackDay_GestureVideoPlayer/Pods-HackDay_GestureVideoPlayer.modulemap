@@ -1,0 +1,6 @@
+framework module Pods_HackDay_GestureVideoPlayer {
+  umbrella header "Pods-HackDay_GestureVideoPlayer-umbrella.h"
+
+  export *
+  module * { export * }
+}
