@@ -96,10 +96,12 @@ class PlayerManager: NSObject {
     private func addPeriodicTimeObserver() {
         let interval = CMTime(seconds: 0.5, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: .main, using: { [weak self] time in
-            self?.delegate?.setTimeObserverValue(time: time)
+            guard let strongSelf = self else { return }
+            
+            strongSelf.delegate?.setTimeObserverValue(time: time)
             
             guard time == self?.asset.duration else { return }
-            self?.delegate?.playerEnded()
+            strongSelf.delegate?.playerEnded()
         })
     }
     

@@ -240,26 +240,14 @@ extension PlayerViewController: PlayerManagerDelegate {
     
     func playerPlayed() {
         playerView.playButton.setState(playState: .play)
-        
-        guard uiVisibleState == .appeared || uiVisibleState == .appearing else { return }
-        playerView.showUI()
-        playerView.setTimer(isLocked: isLocked)
     }
     
     func playerPaused() {
         playerView.playButton.setState(playState: .pause)
-        
-        guard uiVisibleState == .appeared || uiVisibleState == .appearing else { return }
-        playerView.showUI()
-        playerView.setTimer(isLocked: isLocked)
     }
     
     func playerEnded() {
         playerView.playButton.setState(playState: .replay)
-        
-        guard uiVisibleState == .appeared || uiVisibleState == .appearing else { return }
-        playerView.showUI()
-        playerView.setTimer(isLocked: isLocked)
     }
 }
 
@@ -270,8 +258,6 @@ extension PlayerViewController: PlayerViewDelegate {
     }
     
     func playButtonTapped(beforeState: PlayState) {
-        playerView.cancelAllAnimations()
-        
         switch beforeState {
         case .play:
             playerManager?.pause()
@@ -280,14 +266,26 @@ extension PlayerViewController: PlayerViewDelegate {
         case .replay:
             playerManager?.replay()
         }
+        
+        playerView.cancelAllAnimations()
+        playerView.showUI()
+        playerView.setTimer(isLocked: isLocked)
     }
     
     func backwardButtonTapped() {
         playerManager?.changeTenSeconds(to: .backward)
+        
+        playerView.cancelAllAnimations()
+        playerView.showUI()
+        playerView.setTimer(isLocked: isLocked)
     }
     
     func forwardButtonTapped() {
         playerManager?.changeTenSeconds(to: .forward)
+        
+        playerView.cancelAllAnimations()
+        playerView.showUI()
+        playerView.setTimer(isLocked: isLocked)
     }
     
     func timeSliderValueChanged(value: Float) {
@@ -298,6 +296,10 @@ extension PlayerViewController: PlayerViewDelegate {
         let timeToBeChanged = CMTime(seconds: currentTimeSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
         
         playerManager?.stopPlayingAndSeekSmoothlyToTime(newChaseTime: timeToBeChanged)
+        
+        playerView.cancelAllAnimations()
+        playerView.showUI()
+        playerView.setTimer(isLocked: isLocked)
     }
     
     func subtitleButtonTapped() {
