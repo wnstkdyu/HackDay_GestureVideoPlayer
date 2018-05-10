@@ -100,9 +100,6 @@ class PlayerManager: NSObject {
             guard let strongSelf = self else { return }
             
             strongSelf.delegate?.setTimeObserverValue(time: time)
-            
-            guard time == self?.asset.duration else { return }
-            strongSelf.delegate?.playerEnded()
         })
     }
     
@@ -141,12 +138,13 @@ class PlayerManager: NSObject {
     
     public func changeTenSeconds(to direction: Direction) {
         let currentTimeSeconds = player.currentTime().seconds
+        let tenSeconds: Double = 10.0
         let timeToBeChanged: CMTime = {
             switch direction {
             case .backward:
-                return CMTime(seconds: currentTimeSeconds - 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+                return CMTime(seconds: currentTimeSeconds - tenSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             case .forward:
-                return CMTime(seconds: currentTimeSeconds + 10, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+                return CMTime(seconds: currentTimeSeconds + tenSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             }
         }()
         
