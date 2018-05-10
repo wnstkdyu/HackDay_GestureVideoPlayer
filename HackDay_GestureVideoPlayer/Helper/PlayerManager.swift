@@ -150,14 +150,14 @@ class PlayerManager: NSObject {
             }
         }()
         
-        player.seek(to: timeToBeChanged,
-                    toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero) { [weak self] _ in
-            guard let isPlaying = self?.player.isPlaying else { return }
-            switch isPlaying {
+        player.seek(to: timeToBeChanged) { [weak self] _ in
+            guard let strongSelf = self else { return }
+            
+            switch strongSelf.player.isPlaying {
             case true:
-                self?.play()
+                strongSelf.play()
             case false:
-                self?.pause()
+                strongSelf.pause()
             }
         }
     }
@@ -181,23 +181,23 @@ class PlayerManager: NSObject {
     private func actuallySeekToTime() {
         isSeekInProgress = true
         let seekTimeInProgress = chaseTime
-        player.seek(to: seekTimeInProgress,
-                    toleranceBefore: kCMTimeZero,
-                    toleranceAfter: kCMTimeZero) { [weak self] _ in
-                        guard let strongSelf = self else { return }
-                        if CMTimeCompare(seekTimeInProgress, strongSelf.chaseTime) == 0 {
-                            strongSelf.isSeekInProgress = false
-                        } else {
-                            strongSelf.trySeekToChaseTime()
-                        }
-                        
-                        guard let isPlaying = self?.player.isPlaying else { return }
-                        switch isPlaying {
-                        case true:
-                            strongSelf.play()
-                        case false:
-                            strongSelf.pause()
-                        }
+        
+        player.seek(to: seekTimeInProgress) { [weak self] _ in
+            guard let strongSelf = self else { return }
+            
+            if CMTimeCompare(seekTimeInProgress, strongSelf.chaseTime) == 0 {
+                strongSelf.isSeekInProgress = false
+            } else {
+                strongSelf.trySeekToChaseTime()
+            }
+            
+            guard let isPlaying = self?.player.isPlaying else { return }
+            switch isPlaying {
+            case true:
+                strongSelf.play()
+            case false:
+                strongSelf.pause()
+            }
         }
     }
 }

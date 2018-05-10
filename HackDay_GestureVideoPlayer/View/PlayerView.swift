@@ -131,6 +131,7 @@ class PlayerView: UIView {
                     outlet.alpha = 1.0
                 }, completion: { [weak self] completed in
                     guard let strongSelf = self else { return }
+                    
                     guard completed else { return }
                     
                     guard outlet == strongSelf.outletCollection.last else { return }
@@ -150,6 +151,7 @@ class PlayerView: UIView {
                     outlet.alpha = 0.0
                 }, completion: { [weak self] completed in
                     guard let strongSelf = self else { return }
+                    
                     strongSelf.delegate?.uiVisibleStateChange(to: .disappearing)
                     guard completed else { return }
                     
@@ -165,9 +167,9 @@ class PlayerView: UIView {
     }
     
     public func setTimer(isLocked: Bool) {
-        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { [weak self] _ in
+        timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
             self?.fadeOutUI()
-        })
+        }
     }
     
     // MARK: Private Methods

@@ -172,16 +172,16 @@ class PlayerViewController: UIViewController {
             }
         case .ended:
             if let newCMTime = newCMTime {
-                playerManager?.player.seek(to: newCMTime,
-                             toleranceBefore: kCMTimeZero,
-                             toleranceAfter: kCMTimeZero) { [weak self] _ in
-                                guard let isPlaying = self?.playerManager?.player.isPlaying else { return }
-                                switch isPlaying {
-                                case true:
-                                    self?.playerManager?.play()
-                                case false:
-                                    self?.playerManager?.pause()
-                                }
+                playerManager?.player.seek(to: newCMTime) { [weak self] _ in
+                    guard let strongSelf = self else { return }
+                    
+                    guard let isPlaying = strongSelf.playerManager?.player.isPlaying else { return }
+                    switch isPlaying {
+                    case true:
+                        strongSelf.playerManager?.play()
+                    case false:
+                        strongSelf.playerManager?.pause()
+                    }
                 }
             }
             newCMTime = nil
@@ -203,9 +203,12 @@ class PlayerViewController: UIViewController {
         playerView.outletCollection.forEach { $0.isHidden = true }
         
         UIView.animate(withDuration: mediaSelectionTableViewShowingSpeed) { [weak self] in
-            guard let tableViewFrame = self?.mediaSelectionTableView.frame,
-                let viewHeight = self?.view.frame.height else { return }
-            self?.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
+            guard let strongSelf = self else { return }
+            
+            let tableViewFrame = strongSelf.mediaSelectionTableView.frame
+            let viewHeight = strongSelf.view.frame.height
+            
+            strongSelf.mediaSelectionTableView.frame.origin.y = viewHeight - tableViewFrame.height
         }
     }
     
@@ -213,8 +216,11 @@ class PlayerViewController: UIViewController {
         playerView.outletCollection.forEach { $0.isHidden = false }
         
         UIView.animate(withDuration: mediaSelectionTableViewShowingSpeed) { [weak self] in
-            guard let viewHeight = self?.view.frame.height else { return }
-            self?.mediaSelectionTableView.frame.origin.y = viewHeight
+            guard let strongSelf = self else { return }
+            
+            let viewHeight = strongSelf.view.frame.height
+            
+            strongSelf.mediaSelectionTableView.frame.origin.y = viewHeight
         }
     }
 }
