@@ -136,7 +136,7 @@ class PlayerManager: NSObject {
         play()
     }
     
-    public func changeTenSeconds(to direction: Direction) {
+    public func changeTenSeconds(to direction: PlayerDirection) {
         let currentTimeSeconds = player.currentTime().seconds
         let tenSeconds: Double = 10.0
         let timeToBeChanged: CMTime = {

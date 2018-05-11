@@ -59,9 +59,14 @@ public enum PlayState {
     }
 }
 
-public enum Direction {
+public enum PlayerDirection {
     case backward
     case forward
+}
+
+public enum PanGestureDirection {
+    case horizontal
+    case vertical
 }
 
 public enum UIVisibleState {

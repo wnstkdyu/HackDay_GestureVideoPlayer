@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import CoreMedia
+import MediaPlayer
 
 class PlayerViewController: UIViewController {
     
@@ -26,9 +27,12 @@ class PlayerViewController: UIViewController {
     private var uiVisibleState: UIVisibleState = .disappeared
     private var isLocked: Bool = false
     
+    private var panGestureDirection: PanGestureDirection?
     private var newCMTime: CMTime?
     private var firstBrightness: CGFloat?
     private var firstVolume: Float?
+    // 이 방법 밖에 없을까?
+    private let volumeView: MPVolumeView = MPVolumeView(frame: CGRect(x: -500, y: -500, width: 0, height: 0))
     
     private let mediaSelectionTableViewShowingSpeed: TimeInterval = 0.3
     private var mediaSelectionDataSource = MediaSelectionDataSource()
@@ -54,6 +58,8 @@ class PlayerViewController: UIViewController {
         tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
         
         setMediaSelectionTableView()
+        
+        view.addSubview(volumeView)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -131,7 +137,7 @@ class PlayerViewController: UIViewController {
         case .began:
             playerView.centerTimeLabel.isHidden = false
             firstBrightness = UIScreen.main.brightness
-            firstVolume = playerManager?.player.volume
+            firstVolume = AVAudioSession.sharedInstance().outputVolume
             
             view.addSubview(playerView.expandingView)
         case .changed:
@@ -141,6 +147,12 @@ class PlayerViewController: UIViewController {
             
             if abs(xRatio) > abs(yRatio) {
                 // 좌우로 움직임
+                if let panGestureDirection = panGestureDirection {
+                    guard panGestureDirection == .horizontal else { return }
+                } else {
+                    panGestureDirection = .horizontal
+                }
+                
                 let ratio = Double(xRatio)
                 
                 guard let currentTimeSeconds = playerManager?.player.currentTime().seconds,
@@ -153,6 +165,12 @@ class PlayerViewController: UIViewController {
                 playerView.centerTimeLabel.text = newCMTime?.toTimeForamt
             } else {
                 // 상하로 움직임 -> 화면을 반으로 갈라 왼쪽은 밝기, 오른쪽은 볼륨 조절
+                if let panGestureDirection = panGestureDirection {
+                    guard panGestureDirection == .vertical else { return }
+                } else {
+                    panGestureDirection = .vertical
+                }
+                
                 if sender.location(in: playerView).x <= playerView.frame.width / 2 {
                     // 왼쪽: 밝기
                     guard let firstBrightness = firstBrightness else { return }
@@ -162,7 +180,8 @@ class PlayerViewController: UIViewController {
                 } else {
                     // 오른쪽: 볼륨
                     guard let firstVolume = firstVolume else { return }
-                    playerManager?.player.volume = firstVolume - Float(yRatio)
+                    guard let volumeSlider = volumeView.subviews.first as? UISlider else { return }
+                    volumeSlider.setValue(firstVolume - Float(yRatio), animated: false)
                     
                     playerView.expandingView.frame.origin = CGPoint(x: playerView.frame.width / 2, y: playerView.frame.height * CGFloat(1 - (firstVolume - Float(yRatio))))
                     if playerView.expandingView.frame.origin.y < 0 {
@@ -184,6 +203,7 @@ class PlayerViewController: UIViewController {
                     }
                 }
             }
+            panGestureDirection = nil
             newCMTime = nil
             firstBrightness = nil
             firstVolume = nil
