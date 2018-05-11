@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import UIKit
 
 class VideoModel: NSObject {
     // MARK: Public Properties
@@ -17,7 +18,8 @@ class VideoModel: NSObject {
     
     public let remoteURL: URL
     public var localURL: URL?
-    public var asset: AVURLAsset?
+    public var asset: AVURLAsset
+    public var thumbnailImage: UIImage?
     
     // MARK: Private Properties
     private var downloadTask: AVAssetDownloadTask?
@@ -26,12 +28,13 @@ class VideoModel: NSObject {
     
     init(remoteURL: URL) {
         self.remoteURL = remoteURL
+        asset = AVURLAsset(url: remoteURL)
+        super.init()
+        
+        getThumbnailImage()
     }
     
     public func setUpAssetDownload(downloadSession: AVAssetDownloadURLSession) {
-        asset = AVURLAsset(url: remoteURL)
-        guard let asset = asset else { return }
-        
         // Retrieve the AVMediaSelectionGroup for the specified characteristic.
         if let group = asset.mediaSelectionGroup(forMediaCharacteristic: .legible) {
             // Print its options.
@@ -50,5 +53,21 @@ class VideoModel: NSObject {
                                                              options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: minimumBitrate])
         
         downloadTask?.resume()
+    }
+    
+    private func getThumbnailImage() {
+        // 썸네일 이미지가 있는지 먼저 확인
+        guard !asset.tracks(withMediaCharacteristic: .visual).isEmpty else { return }
+        
+        let imageGenerator: AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
+        DispatchQueue.global().async { [weak self] in
+            guard let strongSelf = self else { return }
+            guard let thumbnailCGImage = try? imageGenerator.copyCGImage(at: CMTime(seconds: strongSelf.asset.duration.seconds / 2, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), actualTime: nil) else { return }
+            
+            strongSelf.thumbnailImage = UIImage(cgImage: thumbnailCGImage)
+            
+            NotificationCenter.default.post(name: NotificationName.didReceiveThumbnailImage, object: nil)
+        }
+        
     }
 }

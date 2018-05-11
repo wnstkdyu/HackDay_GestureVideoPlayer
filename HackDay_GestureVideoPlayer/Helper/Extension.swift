@@ -11,7 +11,7 @@ import CoreMedia
 import AVFoundation
 
 extension CMTime {
-    var toTimeForamt: String {
+    var toTimeFormat: String {
         let hours: Int = Int(self.seconds / 3600)
         let minutes: Int = Int(self.seconds.truncatingRemainder(dividingBy: 3600) / 60)
         let seconds: Int = Int(self.seconds.truncatingRemainder(dividingBy: 60))

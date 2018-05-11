@@ -100,7 +100,7 @@ class PlayerView: UIView {
     }
     
     public func setPlayerUI(asset: AVAsset) {
-        totalTimeLabel.text = asset.duration.toTimeForamt
+        totalTimeLabel.text = asset.duration.toTimeFormat
         let secondsOfHour: Double = 3600
         
         if asset.duration.seconds / secondsOfHour > 0 {

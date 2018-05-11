@@ -50,6 +50,17 @@ class PlayerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setUp()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        setPlayerUI()
+    }
+    
+    // MARK: Setup Methods
+    private func setUp() {
         setPlayback()
         
         playerView.hideUI()
@@ -62,13 +73,6 @@ class PlayerViewController: UIViewController {
         view.addSubview(volumeView)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        setPlayerUI()
-    }
-    
-    // MARK: Setup Methods
     private func setPlayback() {
         playerManager?.prepareToPlay()
         
@@ -162,7 +166,7 @@ class PlayerViewController: UIViewController {
                     newSeconds = assetDuration
                 }
                 newCMTime = CMTime(seconds: newSeconds, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-                playerView.centerTimeLabel.text = newCMTime?.toTimeForamt
+                playerView.centerTimeLabel.text = newCMTime?.toTimeFormat
             } else {
                 // 상하로 움직임 -> 화면을 반으로 갈라 왼쪽은 밝기, 오른쪽은 볼륨 조절
                 if let panGestureDirection = panGestureDirection {
@@ -190,6 +194,7 @@ class PlayerViewController: UIViewController {
                 }
             }
         case .ended:
+            // newCMTime이 nil이 아닐 경우 가로로 움직였다는 뜻
             if let newCMTime = newCMTime {
                 playerManager?.player.seek(to: newCMTime) { [weak self] _ in
                     guard let strongSelf = self else { return }
@@ -203,6 +208,8 @@ class PlayerViewController: UIViewController {
                     }
                 }
             }
+            
+            // 상태 변수 초기화
             panGestureDirection = nil
             newCMTime = nil
             firstBrightness = nil

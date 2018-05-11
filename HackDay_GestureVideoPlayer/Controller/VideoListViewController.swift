@@ -45,11 +45,16 @@ class VideoListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        createVideoModelList()
-        setCollectionViewItemSize()
+        setUp()
     }
     
     // MARK: Setup Methods
+    private func setUp() {
+        createVideoModelList()
+        setCollectionViewItemSize()
+        addNotificationObserver()
+    }
+    
     private func createVideoModelList() {
         videoMockURLs.forEach {
             guard let videoURL = $0 else { return }
@@ -74,6 +79,17 @@ class VideoListViewController: UIViewController {
                                      height: view.frame.width / 2 - flowLayout.minimumLineSpacing)
     }
     
+    private func addNotificationObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveThumbnailImage), name: NotificationName.didReceiveThumbnailImage, object: nil)
+    }
+    
+    // MARK: Notification Receiver
+    @objc private func didReceiveThumbnailImage() {
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView.reloadData()
+        }
+    }
+    
 //    private func restorePendingDownloads() {
 //        downloadSession.getAllTasks { tasks in
 //            for task in tasks {
@@ -93,7 +109,10 @@ extension VideoListViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let videoListCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as? VideoListCell ?? VideoListCell()
-        videoListCell.videoLabel.text = videoModelList[indexPath.row].title
+        
+        let videoModel = videoModelList[indexPath.row]
+        videoListCell.videoLabel.text = videoModel.title
+        videoListCell.thumbnailImageView.image = videoModel.thumbnailImage
         
         return videoListCell
     }
@@ -105,11 +124,11 @@ extension VideoListViewController: UICollectionViewDelegate {
         guard let playerViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PlayerViewController") as? PlayerViewController else { return }
         
         let videoModel = videoModelList[indexPath.row]
-        if videoModel.localURL == nil || videoModel.asset?.assetCache?.isPlayableOffline == false {
+        if videoModel.localURL == nil || videoModel.asset.assetCache?.isPlayableOffline == false {
             videoModel.setUpAssetDownload(downloadSession: downloadSession)
         }
-        guard let asset = videoModel.asset else { return }
-        playerViewController.playerManager = PlayerManager(asset: asset)
+
+        playerViewController.playerManager = PlayerManager(asset: videoModel.asset)
         
         navigationController?.pushViewController(playerViewController, animated: true)
     }

@@ -42,14 +42,21 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LQG-yu-bRo">
+                                                    <rect key="frame" x="0.0" y="0.0" width="212" height="196"/>
+                                                </imageView>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="lDb-hp-X6w" firstAttribute="centerX" secondItem="59z-En-si7" secondAttribute="centerX" id="0NB-1H-ns7"/>
+                                            <constraint firstItem="LQG-yu-bRo" firstAttribute="top" secondItem="59z-En-si7" secondAttribute="top" id="9vC-7o-11j"/>
+                                            <constraint firstItem="LQG-yu-bRo" firstAttribute="centerX" secondItem="59z-En-si7" secondAttribute="centerX" id="H2x-if-XWI"/>
+                                            <constraint firstItem="LQG-yu-bRo" firstAttribute="centerY" secondItem="59z-En-si7" secondAttribute="centerY" id="ZT9-Cf-2OR"/>
                                             <constraint firstItem="lDb-hp-X6w" firstAttribute="centerY" secondItem="59z-En-si7" secondAttribute="centerY" id="tuF-HH-Eux"/>
+                                            <constraint firstItem="LQG-yu-bRo" firstAttribute="leading" secondItem="59z-En-si7" secondAttribute="leading" id="uyQ-oc-ghp"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="thumbnailImageView" destination="LQG-yu-bRo" id="WgA-7x-uBM"/>
                                             <outlet property="videoLabel" destination="lDb-hp-X6w" id="ojf-lQ-tCH"/>
                                         </connections>
                                     </collectionViewCell>
