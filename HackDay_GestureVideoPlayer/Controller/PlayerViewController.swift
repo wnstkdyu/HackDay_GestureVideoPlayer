@@ -31,8 +31,7 @@ class PlayerViewController: UIViewController {
     private var newCMTime: CMTime?
     private var firstBrightness: CGFloat?
     private var firstVolume: Float?
-    // 이 방법 밖에 없을까?
-    private let volumeView: MPVolumeView = MPVolumeView(frame: CGRect(x: -500, y: -500, width: 0, height: 0))
+    private let volumeView: MPVolumeView = MPVolumeView(frame: .zero)
     
     private let mediaSelectionTableViewShowingSpeed: TimeInterval = 0.3
     private var mediaSelectionDataSource = MediaSelectionDataSource()
@@ -69,8 +68,7 @@ class PlayerViewController: UIViewController {
         tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
         
         setMediaSelectionTableView()
-        
-        view.addSubview(volumeView)
+        setVolumeView()
     }
     
     private func setPlayback() {
@@ -94,6 +92,13 @@ class PlayerViewController: UIViewController {
     private func setMediaSelectionTableView() {
         mediaSelectionTableView.rowHeight = mediaSelectionTableView.frame.height / 3
         mediaSelectionTableView.dataSource = mediaSelectionDataSource
+    }
+    
+    private func setVolumeView() {
+        volumeView.clipsToBounds = true
+        volumeView.isUserInteractionEnabled = false
+        
+        view.addSubview(volumeView)
     }
     
     private func getSubtitleInfo(asset: AVAsset) {
