@@ -151,12 +151,7 @@ class PlayerManager: NSObject {
         player.seek(to: timeToBeChanged) { [weak self] _ in
             guard let strongSelf = self else { return }
             
-            switch strongSelf.player.isPlaying {
-            case true:
-                strongSelf.play()
-            case false:
-                strongSelf.pause()
-            }
+            strongSelf.player.isPlaying ? strongSelf.play() : strongSelf.pause()
         }
     }
     
@@ -190,12 +185,7 @@ class PlayerManager: NSObject {
             }
             
             guard let isPlaying = self?.player.isPlaying else { return }
-            switch isPlaying {
-            case true:
-                strongSelf.play()
-            case false:
-                strongSelf.pause()
-            }
+            isPlaying ? strongSelf.play() : strongSelf.pause()
         }
     }
 }

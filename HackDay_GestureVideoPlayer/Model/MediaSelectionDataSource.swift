@@ -31,18 +31,13 @@ class MediaSelectionDataSource: NSObject {
 extension MediaSelectionDataSource: UITableViewDataSource {
     // MARK: UITableViewDataSource Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch isSubtitle {
-        case true:
-            return subtitlesArray.count
-        case false:
-            return resolutionsArray.count
-        }
+        return isSubtitle ? subtitlesArray.count : resolutionsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-        switch isSubtitle {
-        case true:
+        
+        if isSubtitle {
             let subtitleData = subtitlesArray[indexPath.row]
             cell.textLabel?.text = subtitleData.0.rawValue
             
@@ -51,7 +46,7 @@ extension MediaSelectionDataSource: UITableViewDataSource {
             } else {
                 cell.accessoryType = .none
             }
-        case false:
+        } else {
             let resolutionData = resolutionsArray[indexPath.row]
             cell.textLabel?.text = resolutionData.0.rawValue
             

@@ -191,11 +191,6 @@ class PlayerView: UIView {
     private func setLockUI(isLocked: Bool) {
         delegate?.setLock(isLocked: isLocked)
         
-        switch isLocked {
-        case true:
-            fadeOutUI(isLocked: true)
-        case false:
-            fadeInUI(isLocked: false)
-        }
+        isLocked ? fadeOutUI(isLocked: true) : fadeInUI(isLocked: false)
     }
 }

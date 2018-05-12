@@ -125,10 +125,8 @@ class PlayerViewController: UIViewController {
         
         switch uiVisibleState {
         case .appeared, .appearing:
-            print("보이기 때문에 사라져랏")
             playerView.fadeOutUI(isLocked: isLocked)
         case .disappeared, .disappearing:
-            print("안 보이기 때문에 나와랏")
             playerView.fadeInUI(isLocked: isLocked)
         }
     }
@@ -205,12 +203,7 @@ class PlayerViewController: UIViewController {
                     guard let strongSelf = self else { return }
                     
                     guard let isPlaying = strongSelf.playerManager?.player.isPlaying else { return }
-                    switch isPlaying {
-                    case true:
-                        strongSelf.playerManager?.play()
-                    case false:
-                        strongSelf.playerManager?.pause()
-                    }
+                    isPlaying ? strongSelf.playerManager?.play() : strongSelf.playerManager?.pause()
                 }
             }
             
@@ -400,8 +393,7 @@ extension PlayerViewController: UITableViewDelegate {
         let cell = tableView.cellForRow(at: indexPath)
         cell?.accessoryType = .checkmark
         
-        switch mediaSelectionDataSource.isSubtitle {
-        case true:
+        if mediaSelectionDataSource.isSubtitle {
             for index in mediaSelectionDataSource.subtitlesArray.indices {
                 let subtitleInfo = mediaSelectionDataSource.subtitlesArray[index]
                 if index == indexPath.row {
@@ -418,7 +410,7 @@ extension PlayerViewController: UITableViewDelegate {
                     mediaSelectionDataSource.subtitlesArray[index] = (subtitleInfo.0, false)
                 }
             }
-        case false:
+        } else {
             guard let playerItem = playerManager?.player.currentItem else { return }
             
             for index in mediaSelectionDataSource.resolutionsArray.indices {
