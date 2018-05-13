@@ -20,3 +20,6 @@
   - 각 화질에 맞는 `preferredPeakBitRate`에 대한 정보로 화질 정보 구현.
 - [What's New in HTTP Live Streaming - WWDC 2016 Session 504](https://developer.apple.com/videos/play/wwdc2016/504/)
   - HLS로 받은 `AVAsset`에 대한 자막 정보 얻어오기 공부.
+
+## JSON 파싱
+- [Encoding and Decoding Custom Types - Apple Developer Documentation](https://developer.apple.com/documentation/foundation/archives_and_serialization/encoding_and_decoding_custom_types)

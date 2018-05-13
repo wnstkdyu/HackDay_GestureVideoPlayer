@@ -46,7 +46,7 @@ class PlayerManager: NSObject {
         removePlayerItemObserver()
     }
     
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard context == &playerItemContext else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             
@@ -157,13 +157,11 @@ class PlayerManager: NSObject {
     
     // MARK: TimeSlider ValueChanged
     public func stopPlayingAndSeekSmoothlyToTime(newChaseTime: CMTime) {
-        if CMTimeCompare(newChaseTime, chaseTime) != 0 {
-            chaseTime = newChaseTime
-            
-            if !isSeekInProgress {
-                trySeekToChaseTime()
-            }
-        }
+        guard CMTimeCompare(newChaseTime, chaseTime) != 0 else { return }
+        
+        chaseTime = newChaseTime
+        guard !isSeekInProgress else { return }
+        trySeekToChaseTime()
     }
     
     private func trySeekToChaseTime() {

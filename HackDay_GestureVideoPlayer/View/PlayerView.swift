@@ -125,16 +125,22 @@ class PlayerView: UIView {
     public func fadeInUI(isLocked: Bool = false) {
         delegate?.uiVisibleStateChange(to: .appearing)
         
-        outletCollection.filter { isLocked ? $0 == lockButton : true }
+        outletCollection
+            .filter {
+                guard !isLocked else {
+                    return $0 == lockButton
+                }
+                
+                return true
+            }
             .forEach { outlet in
                 UIView.animate(withDuration: fadeDuration, delay: 0.0, options: [.allowUserInteraction], animations: {
                     outlet.alpha = 1.0
                 }, completion: { [weak self] completed in
-                    guard let strongSelf = self else { return }
+                    guard let strongSelf = self,
+                        completed,
+                        outlet == strongSelf.outletCollection.last else { return }
                     
-                    guard completed else { return }
-                    
-                    guard outlet == strongSelf.outletCollection.last else { return }
                     strongSelf.delegate?.uiVisibleStateChange(to: .appeared)
                     
                     strongSelf.timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false, block: { _ in
@@ -145,7 +151,14 @@ class PlayerView: UIView {
     }
     
     public func fadeOutUI(delay: TimeInterval = 0.0, isLocked: Bool = false) {
-        outletCollection.filter { isLocked ? $0 != lockButton : true }
+        outletCollection
+            .filter {
+                guard !isLocked else {
+                    return $0 != lockButton
+                }
+                
+                return true
+            }
             .forEach { outlet in
                 UIView.animate(withDuration: fadeDuration, delay: delay, options: [.allowUserInteraction], animations: {
                     outlet.alpha = 0.0

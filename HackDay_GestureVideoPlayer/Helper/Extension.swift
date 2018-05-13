@@ -26,11 +26,7 @@ extension CMTime {
 
 extension AVPlayer {
     var isPlaying: Bool {
-        if self.rate > 0.0 {
-            return true
-        } else {
-            return false
-        }
+        return rate > 0.0
     }
 }
 
