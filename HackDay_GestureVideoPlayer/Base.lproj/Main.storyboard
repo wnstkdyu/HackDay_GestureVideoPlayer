@@ -69,12 +69,12 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="tsR-wG-CS9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="1T9-2N-YUd"/>
-                            <constraint firstItem="tsR-wG-CS9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Kyf-ZN-05X"/>
-                            <constraint firstItem="tsR-wG-CS9" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="YRy-oA-g3h"/>
+                            <constraint firstItem="tsR-wG-CS9" firstAttribute="leading" secondItem="sbG-1J-iUg" secondAttribute="leading" id="1T9-2N-YUd"/>
+                            <constraint firstItem="tsR-wG-CS9" firstAttribute="top" secondItem="sbG-1J-iUg" secondAttribute="top" id="Kyf-ZN-05X"/>
+                            <constraint firstItem="tsR-wG-CS9" firstAttribute="centerX" secondItem="sbG-1J-iUg" secondAttribute="centerX" id="YRy-oA-g3h"/>
                             <constraint firstItem="tsR-wG-CS9" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="kLY-Cs-djs"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="sbG-1J-iUg"/>
                     </view>
                     <navigationItem key="navigationItem" id="Buh-Xj-htJ"/>
                     <connections>
@@ -93,156 +93,136 @@
                         <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="1.5" translatesAutoresizingMaskIntoConstraints="NO" id="cHG-fc-XEu">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mrN-uq-EQI" customClass="PlayerView" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mrN-uq-EQI" customClass="PlayerView" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fOW-5t-nlC" userLabel="Back Button">
+                                        <rect key="frame" x="16" y="16" width="48" height="48"/>
+                                        <state key="normal" image="ic_keyboard_arrow_left_white_48pt"/>
+                                        <connections>
+                                            <action selector="backButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="s5o-6F-hnp"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y9M-Yx-YEx" customClass="PlayButton" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target">
+                                        <rect key="frame" x="309.5" y="163" width="48" height="48"/>
+                                        <gestureRecognizers/>
+                                        <state key="normal" image="ic_play_arrow_white_48pt"/>
+                                        <state key="selected" image="ic_pause_white_48pt"/>
+                                        <connections>
+                                            <action selector="playButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="5KP-YM-49y"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nt-Ff-rn0" userLabel="Replay Button">
+                                        <rect key="frame" x="221" y="163" width="48" height="48"/>
+                                        <state key="normal" image="ic_replay_10_white_48pt"/>
+                                        <connections>
+                                            <action selector="backwardButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="1gG-jp-rRa"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fKa-fm-WWY" userLabel="Forward Button">
+                                        <rect key="frame" x="397" y="163" width="48" height="48"/>
+                                        <state key="normal" image="ic_forward_10_white_48pt"/>
+                                        <connections>
+                                            <action selector="forwardButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="tOz-Td-ul6"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvZ-iw-8On">
+                                        <rect key="frame" x="582" y="163" width="48" height="48"/>
+                                        <state key="normal" image="ic_lock_open_white_48pt"/>
+                                        <state key="selected" image="ic_lock_outline_white_48pt"/>
+                                        <connections>
+                                            <action selector="lockButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="Kur-yL-vSo"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGh-xu-I58">
+                                        <rect key="frame" x="603" y="16" width="48" height="48"/>
+                                        <state key="normal" image="ic_subtitles_white_48pt"/>
+                                        <connections>
+                                            <action selector="subtitleButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="FJh-sw-Jd5"/>
+                                        </connections>
+                                    </button>
+                                    <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LQL-j5-1pA">
+                                        <rect key="frame" x="14" y="329" width="481" height="31"/>
+                                        <color key="tintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="timeSliderValueChanged:" destination="mrN-uq-EQI" eventType="valueChanged" id="MYD-ST-We8"/>
+                                        </connections>
+                                    </slider>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="A0L-Hw-WBm">
+                                        <rect key="frame" x="513" y="335.5" width="82" height="17"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fOW-5t-nlC" userLabel="Back Button">
-                                                <rect key="frame" x="4" y="4" width="48" height="48"/>
-                                                <state key="normal" image="ic_keyboard_arrow_left_white_48pt"/>
-                                                <connections>
-                                                    <action selector="backButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="s5o-6F-hnp"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y9M-Yx-YEx" customClass="PlayButton" customModule="HackDay_GestureVideoPlayer" customModuleProvider="target">
-                                                <rect key="frame" x="309.5" y="163" width="48" height="48"/>
-                                                <gestureRecognizers/>
-                                                <state key="normal" image="ic_play_arrow_white_48pt"/>
-                                                <state key="selected" image="ic_pause_white_48pt"/>
-                                                <connections>
-                                                    <action selector="playButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="5KP-YM-49y"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nt-Ff-rn0" userLabel="Replay Button">
-                                                <rect key="frame" x="221" y="163" width="48" height="48"/>
-                                                <state key="normal" image="ic_replay_10_white_48pt"/>
-                                                <connections>
-                                                    <action selector="backwardButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="1gG-jp-rRa"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fKa-fm-WWY" userLabel="Forward Button">
-                                                <rect key="frame" x="397" y="163" width="48" height="48"/>
-                                                <state key="normal" image="ic_forward_10_white_48pt"/>
-                                                <connections>
-                                                    <action selector="forwardButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="tOz-Td-ul6"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bvZ-iw-8On">
-                                                <rect key="frame" x="582" y="163" width="48" height="48"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <state key="normal" image="ic_lock_open_white_48pt"/>
-                                                <state key="selected" image="ic_lock_outline_white_48pt"/>
-                                                <connections>
-                                                    <action selector="lockButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="Kur-yL-vSo"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGh-xu-I58">
-                                                <rect key="frame" x="615" y="4" width="48" height="48"/>
-                                                <state key="normal" image="ic_subtitles_white_48pt"/>
-                                                <connections>
-                                                    <action selector="subtitleButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="FJh-sw-Jd5"/>
-                                                </connections>
-                                            </button>
-                                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LQL-j5-1pA">
-                                                <rect key="frame" x="18" y="329" width="477" height="31"/>
-                                                <color key="tintColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                <connections>
-                                                    <action selector="timeSliderValueChanged:" destination="mrN-uq-EQI" eventType="valueChanged" id="MYD-ST-We8"/>
-                                                </connections>
-                                            </slider>
-                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="A0L-Hw-WBm">
-                                                <rect key="frame" x="513" y="335.5" width="82" height="17"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4lm-98-T9K" userLabel="CurrentTimeLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="39" height="17"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <color key="textColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQX-A4-sZs" userLabel="TotalTimeLabel">
-                                                        <rect key="frame" x="43" y="0.0" width="39" height="17"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                        <color key="textColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </stackView>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="glN-4Z-9rF">
-                                                <rect key="frame" x="615" y="329" width="36" height="30"/>
-                                                <state key="normal" title="720P">
-                                                    <color key="titleColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="resolutionButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="acK-cf-Z40"/>
-                                                </connections>
-                                            </button>
-                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BQj-Bb-gFp">
-                                                <rect key="frame" x="333" y="187" width="0.0" height="0.0"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4lm-98-T9K" userLabel="CurrentTimeLabel">
+                                                <rect key="frame" x="0.0" y="0.0" width="39" height="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <color key="textColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FQX-A4-sZs" userLabel="TotalTimeLabel">
+                                                <rect key="frame" x="43" y="0.0" width="39" height="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
-                                        <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstItem="Y9M-Yx-YEx" firstAttribute="leading" secondItem="7nt-Ff-rn0" secondAttribute="trailing" constant="40" id="0mg-Eb-gub"/>
-                                            <constraint firstItem="LQL-j5-1pA" firstAttribute="leading" secondItem="mrN-uq-EQI" secondAttribute="leading" constant="20" id="1m9-nN-ce2"/>
-                                            <constraint firstItem="fKa-fm-WWY" firstAttribute="leading" secondItem="Y9M-Yx-YEx" secondAttribute="trailing" constant="40" id="3Vx-Ab-4Dj"/>
-                                            <constraint firstItem="fOW-5t-nlC" firstAttribute="leading" secondItem="mrN-uq-EQI" secondAttribute="leading" constant="4" id="409-fa-o75"/>
-                                            <constraint firstAttribute="trailing" secondItem="glN-4Z-9rF" secondAttribute="trailing" constant="16" id="6ec-qv-FT8"/>
-                                            <constraint firstItem="fKa-fm-WWY" firstAttribute="centerY" secondItem="Y9M-Yx-YEx" secondAttribute="centerY" id="79Q-eS-qMD"/>
-                                            <constraint firstItem="glN-4Z-9rF" firstAttribute="leading" secondItem="A0L-Hw-WBm" secondAttribute="trailing" constant="20" id="7jO-qN-gYY"/>
-                                            <constraint firstItem="fOW-5t-nlC" firstAttribute="top" secondItem="mrN-uq-EQI" secondAttribute="top" constant="4" id="7kL-m8-ljF"/>
-                                            <constraint firstItem="A0L-Hw-WBm" firstAttribute="centerY" secondItem="glN-4Z-9rF" secondAttribute="centerY" id="C5S-qs-nsE"/>
-                                            <constraint firstItem="7nt-Ff-rn0" firstAttribute="centerY" secondItem="Y9M-Yx-YEx" secondAttribute="centerY" id="CyU-RG-ODf"/>
-                                            <constraint firstItem="Y9M-Yx-YEx" firstAttribute="centerX" secondItem="mrN-uq-EQI" secondAttribute="centerX" id="MX2-jJ-VBt"/>
-                                            <constraint firstItem="BQj-Bb-gFp" firstAttribute="centerY" secondItem="mrN-uq-EQI" secondAttribute="centerY" id="Tlu-Uo-Z3G"/>
-                                            <constraint firstAttribute="trailing" secondItem="TGh-xu-I58" secondAttribute="trailing" constant="4" id="a7U-fc-3h7"/>
-                                            <constraint firstItem="Y9M-Yx-YEx" firstAttribute="centerY" secondItem="mrN-uq-EQI" secondAttribute="centerY" id="bJD-eq-t7g"/>
-                                            <constraint firstAttribute="bottom" secondItem="glN-4Z-9rF" secondAttribute="bottom" constant="16" id="cb5-9h-qPl"/>
-                                            <constraint firstItem="LQL-j5-1pA" firstAttribute="centerY" secondItem="A0L-Hw-WBm" secondAttribute="centerY" id="gdH-6u-bqq"/>
-                                            <constraint firstItem="TGh-xu-I58" firstAttribute="top" secondItem="mrN-uq-EQI" secondAttribute="top" constant="4" id="k4B-TA-T74"/>
-                                            <constraint firstItem="A0L-Hw-WBm" firstAttribute="leading" secondItem="LQL-j5-1pA" secondAttribute="trailing" constant="20" id="qjc-39-aa5"/>
-                                            <constraint firstItem="BQj-Bb-gFp" firstAttribute="centerX" secondItem="mrN-uq-EQI" secondAttribute="centerX" id="vfJ-na-EZW"/>
-                                        </constraints>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="glN-4Z-9rF">
+                                        <rect key="frame" x="615" y="329" width="36" height="30"/>
+                                        <state key="normal" title="720P">
+                                            <color key="titleColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
                                         <connections>
-                                            <outlet property="backButton" destination="fOW-5t-nlC" id="3nF-5O-YEv"/>
-                                            <outlet property="centerTimeLabel" destination="BQj-Bb-gFp" id="ZMC-EV-8Tc"/>
-                                            <outlet property="currentTimeLabel" destination="4lm-98-T9K" id="gVU-Lm-JgE"/>
-                                            <outlet property="lockButton" destination="bvZ-iw-8On" id="iCX-NG-eD5"/>
-                                            <outlet property="playButton" destination="Y9M-Yx-YEx" id="Cxv-8p-071"/>
-                                            <outlet property="resolutionButton" destination="glN-4Z-9rF" id="Ycw-w2-SCV"/>
-                                            <outlet property="subtitleButton" destination="TGh-xu-I58" id="Ccc-Cv-XPi"/>
-                                            <outlet property="timeSlider" destination="LQL-j5-1pA" id="MhW-Em-gHb"/>
-                                            <outlet property="totalTimeLabel" destination="FQX-A4-sZs" id="Kpg-gD-UJ7"/>
-                                            <outletCollection property="outletCollection" destination="Y9M-Yx-YEx" collectionClass="NSMutableArray" id="3VO-ii-89e"/>
-                                            <outletCollection property="outletCollection" destination="fKa-fm-WWY" collectionClass="NSMutableArray" id="aRR-Xz-zlI"/>
-                                            <outletCollection property="outletCollection" destination="bvZ-iw-8On" collectionClass="NSMutableArray" id="Ls6-k8-afj"/>
-                                            <outletCollection property="outletCollection" destination="TGh-xu-I58" collectionClass="NSMutableArray" id="Lov-zu-N8U"/>
-                                            <outletCollection property="outletCollection" destination="LQL-j5-1pA" collectionClass="NSMutableArray" id="Nby-Sb-k4O"/>
-                                            <outletCollection property="outletCollection" destination="7nt-Ff-rn0" collectionClass="NSMutableArray" id="t6U-vB-3Lk"/>
-                                            <outletCollection property="outletCollection" destination="A0L-Hw-WBm" collectionClass="NSMutableArray" id="Omz-Bs-X8j"/>
-                                            <outletCollection property="outletCollection" destination="glN-4Z-9rF" collectionClass="NSMutableArray" id="ys7-fN-Rbs"/>
-                                            <outletCollection property="gestureRecognizers" destination="Skt-6v-sCX" appends="YES" id="mAH-83-JE6"/>
-                                            <outletCollection property="gestureRecognizers" destination="F2k-Lq-jxm" appends="YES" id="lws-hQ-n0E"/>
-                                            <outletCollection property="gestureRecognizers" destination="aSg-Jq-9bM" appends="YES" id="z4A-1r-Mxw"/>
+                                            <action selector="resolutionButtonTapped:" destination="mrN-uq-EQI" eventType="touchUpInside" id="acK-cf-Z40"/>
                                         </connections>
-                                    </view>
+                                    </button>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BQj-Bb-gFp">
+                                        <rect key="frame" x="333" y="187" width="0.0" height="0.0"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                        <color key="textColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
+                                <gestureRecognizers/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="mrN-uq-EQI" secondAttribute="bottom" id="2lV-Bz-ubr"/>
-                                    <constraint firstItem="mrN-uq-EQI" firstAttribute="top" secondItem="cHG-fc-XEu" secondAttribute="top" id="80g-ys-ITz"/>
-                                    <constraint firstItem="mrN-uq-EQI" firstAttribute="centerX" secondItem="cHG-fc-XEu" secondAttribute="centerX" id="KOP-YF-pVW"/>
-                                    <constraint firstItem="mrN-uq-EQI" firstAttribute="centerY" secondItem="cHG-fc-XEu" secondAttribute="centerY" id="Yau-3U-xDh"/>
-                                    <constraint firstItem="mrN-uq-EQI" firstAttribute="leading" secondItem="cHG-fc-XEu" secondAttribute="leading" id="ahP-ca-UAG"/>
-                                    <constraint firstAttribute="trailing" secondItem="mrN-uq-EQI" secondAttribute="trailing" id="mqD-i5-MmI"/>
+                                    <constraint firstItem="Y9M-Yx-YEx" firstAttribute="leading" secondItem="7nt-Ff-rn0" secondAttribute="trailing" constant="40" id="0mg-Eb-gub"/>
+                                    <constraint firstItem="fKa-fm-WWY" firstAttribute="leading" secondItem="Y9M-Yx-YEx" secondAttribute="trailing" constant="40" id="3Vx-Ab-4Dj"/>
+                                    <constraint firstItem="fKa-fm-WWY" firstAttribute="centerY" secondItem="Y9M-Yx-YEx" secondAttribute="centerY" id="79Q-eS-qMD"/>
+                                    <constraint firstItem="glN-4Z-9rF" firstAttribute="leading" secondItem="A0L-Hw-WBm" secondAttribute="trailing" constant="20" id="7jO-qN-gYY"/>
+                                    <constraint firstItem="A0L-Hw-WBm" firstAttribute="centerY" secondItem="glN-4Z-9rF" secondAttribute="centerY" id="C5S-qs-nsE"/>
+                                    <constraint firstItem="7nt-Ff-rn0" firstAttribute="centerY" secondItem="Y9M-Yx-YEx" secondAttribute="centerY" id="CyU-RG-ODf"/>
+                                    <constraint firstItem="bvZ-iw-8On" firstAttribute="centerY" secondItem="fKa-fm-WWY" secondAttribute="centerY" id="IxB-HR-e2I"/>
+                                    <constraint firstItem="Y9M-Yx-YEx" firstAttribute="centerX" secondItem="mrN-uq-EQI" secondAttribute="centerX" id="MX2-jJ-VBt"/>
+                                    <constraint firstItem="BQj-Bb-gFp" firstAttribute="centerY" secondItem="mrN-uq-EQI" secondAttribute="centerY" id="Tlu-Uo-Z3G"/>
+                                    <constraint firstItem="Y9M-Yx-YEx" firstAttribute="centerY" secondItem="mrN-uq-EQI" secondAttribute="centerY" id="bJD-eq-t7g"/>
+                                    <constraint firstAttribute="bottom" secondItem="glN-4Z-9rF" secondAttribute="bottom" constant="16" id="cb5-9h-qPl"/>
+                                    <constraint firstItem="LQL-j5-1pA" firstAttribute="centerY" secondItem="A0L-Hw-WBm" secondAttribute="centerY" id="gdH-6u-bqq"/>
+                                    <constraint firstItem="A0L-Hw-WBm" firstAttribute="leading" secondItem="LQL-j5-1pA" secondAttribute="trailing" constant="20" id="qjc-39-aa5"/>
+                                    <constraint firstItem="BQj-Bb-gFp" firstAttribute="centerX" secondItem="mrN-uq-EQI" secondAttribute="centerX" id="vfJ-na-EZW"/>
+                                    <constraint firstItem="bvZ-iw-8On" firstAttribute="leading" secondItem="fKa-fm-WWY" secondAttribute="trailing" constant="137" id="zMj-fG-Ir7"/>
                                 </constraints>
                                 <connections>
-                                    <outlet property="delegate" destination="dS9-yh-DjW" id="V0f-os-O85"/>
+                                    <outlet property="backButton" destination="fOW-5t-nlC" id="3nF-5O-YEv"/>
+                                    <outlet property="centerTimeLabel" destination="BQj-Bb-gFp" id="ZMC-EV-8Tc"/>
+                                    <outlet property="currentTimeLabel" destination="4lm-98-T9K" id="gVU-Lm-JgE"/>
+                                    <outlet property="lockButton" destination="bvZ-iw-8On" id="iCX-NG-eD5"/>
+                                    <outlet property="playButton" destination="Y9M-Yx-YEx" id="Cxv-8p-071"/>
+                                    <outlet property="resolutionButton" destination="glN-4Z-9rF" id="Ycw-w2-SCV"/>
+                                    <outlet property="subtitleButton" destination="TGh-xu-I58" id="Ccc-Cv-XPi"/>
+                                    <outlet property="timeSlider" destination="LQL-j5-1pA" id="MhW-Em-gHb"/>
+                                    <outlet property="totalTimeLabel" destination="FQX-A4-sZs" id="Kpg-gD-UJ7"/>
+                                    <outletCollection property="outletCollection" destination="Y9M-Yx-YEx" collectionClass="NSMutableArray" id="3VO-ii-89e"/>
+                                    <outletCollection property="outletCollection" destination="fKa-fm-WWY" collectionClass="NSMutableArray" id="aRR-Xz-zlI"/>
+                                    <outletCollection property="outletCollection" destination="bvZ-iw-8On" collectionClass="NSMutableArray" id="Ls6-k8-afj"/>
+                                    <outletCollection property="outletCollection" destination="TGh-xu-I58" collectionClass="NSMutableArray" id="Lov-zu-N8U"/>
+                                    <outletCollection property="outletCollection" destination="LQL-j5-1pA" collectionClass="NSMutableArray" id="Nby-Sb-k4O"/>
+                                    <outletCollection property="outletCollection" destination="7nt-Ff-rn0" collectionClass="NSMutableArray" id="t6U-vB-3Lk"/>
+                                    <outletCollection property="outletCollection" destination="A0L-Hw-WBm" collectionClass="NSMutableArray" id="Omz-Bs-X8j"/>
+                                    <outletCollection property="outletCollection" destination="glN-4Z-9rF" collectionClass="NSMutableArray" id="ys7-fN-Rbs"/>
+                                    <outletCollection property="gestureRecognizers" destination="Skt-6v-sCX" appends="YES" id="mAH-83-JE6"/>
+                                    <outletCollection property="gestureRecognizers" destination="aSg-Jq-9bM" appends="YES" id="z4A-1r-Mxw"/>
+                                    <outletCollection property="gestureRecognizers" destination="F2k-Lq-jxm" appends="YES" id="lws-hQ-n0E"/>
+                                    <outletCollection property="outletCollection" destination="fOW-5t-nlC" collectionClass="NSMutableArray" id="8cm-FK-StV"/>
                                 </connections>
-                            </scrollView>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UcY-Yt-utQ">
                                 <rect key="frame" x="0.0" y="375" width="667" height="150"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -279,39 +259,44 @@
                         </subviews>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="cHG-fc-XEu" firstAttribute="height" secondItem="JPM-Ya-nZH" secondAttribute="height" id="17h-PT-8qV"/>
                             <constraint firstItem="UcY-Yt-utQ" firstAttribute="width" secondItem="JPM-Ya-nZH" secondAttribute="width" id="3dQ-Kr-Q7Z"/>
-                            <constraint firstItem="cHG-fc-XEu" firstAttribute="width" secondItem="JPM-Ya-nZH" secondAttribute="width" id="Lhi-ba-war"/>
-                            <constraint firstItem="UcY-Yt-utQ" firstAttribute="centerX" secondItem="rHd-oa-YF0" secondAttribute="centerX" id="P11-Dx-skr"/>
+                            <constraint firstItem="mrN-uq-EQI" firstAttribute="top" secondItem="JPM-Ya-nZH" secondAttribute="top" id="5an-Gc-PQE"/>
+                            <constraint firstItem="e4M-FB-cZY" firstAttribute="trailing" secondItem="TGh-xu-I58" secondAttribute="trailing" constant="16" id="8g0-Xr-KcU"/>
+                            <constraint firstItem="mrN-uq-EQI" firstAttribute="centerX" secondItem="JPM-Ya-nZH" secondAttribute="centerX" id="G8x-xy-2bh"/>
+                            <constraint firstItem="mrN-uq-EQI" firstAttribute="centerY" secondItem="JPM-Ya-nZH" secondAttribute="centerY" id="GG7-PF-kUV"/>
+                            <constraint firstItem="UcY-Yt-utQ" firstAttribute="centerX" secondItem="JPM-Ya-nZH" secondAttribute="centerX" id="P11-Dx-skr"/>
                             <constraint firstItem="UcY-Yt-utQ" firstAttribute="height" secondItem="JPM-Ya-nZH" secondAttribute="height" multiplier="0.4" id="Pnc-gE-fXQ"/>
-                            <constraint firstItem="cHG-fc-XEu" firstAttribute="centerX" secondItem="JPM-Ya-nZH" secondAttribute="centerX" id="S2v-vM-wq0"/>
-                            <constraint firstItem="cHG-fc-XEu" firstAttribute="centerY" secondItem="JPM-Ya-nZH" secondAttribute="centerY" id="iei-Vi-zvC"/>
-                            <constraint firstItem="rHd-oa-YF0" firstAttribute="bottom" secondItem="UcY-Yt-utQ" secondAttribute="top" id="rVQ-gd-BgA"/>
+                            <constraint firstItem="TGh-xu-I58" firstAttribute="top" secondItem="e4M-FB-cZY" secondAttribute="top" constant="16" id="ZMg-zt-vGz"/>
+                            <constraint firstItem="mrN-uq-EQI" firstAttribute="leading" secondItem="JPM-Ya-nZH" secondAttribute="leading" id="bf2-de-w8o"/>
+                            <constraint firstItem="fOW-5t-nlC" firstAttribute="top" secondItem="e4M-FB-cZY" secondAttribute="top" constant="16" id="eED-IS-zWS"/>
+                            <constraint firstItem="fOW-5t-nlC" firstAttribute="leading" secondItem="e4M-FB-cZY" secondAttribute="leading" constant="16" id="mUa-os-hlk"/>
+                            <constraint firstItem="LQL-j5-1pA" firstAttribute="leading" secondItem="e4M-FB-cZY" secondAttribute="leading" constant="16" id="mkm-Wh-SUk"/>
+                            <constraint firstAttribute="bottom" secondItem="UcY-Yt-utQ" secondAttribute="top" id="rVQ-gd-BgA"/>
+                            <constraint firstItem="e4M-FB-cZY" firstAttribute="trailing" secondItem="glN-4Z-9rF" secondAttribute="trailing" constant="16" id="vdI-Kp-2Or"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="rHd-oa-YF0"/>
+                        <viewLayoutGuide key="safeArea" id="e4M-FB-cZY"/>
                     </view>
                     <connections>
                         <outlet property="doubleTapGestureRecognizer" destination="aSg-Jq-9bM" id="YQW-ql-ggH"/>
                         <outlet property="mediaSelectionTableView" destination="UcY-Yt-utQ" id="edX-gv-wWb"/>
                         <outlet property="playerView" destination="mrN-uq-EQI" id="amc-Vu-Dsf"/>
-                        <outlet property="scrollView" destination="cHG-fc-XEu" id="UF7-B2-75p"/>
                         <outlet property="tapGestureRecognizer" destination="Skt-6v-sCX" id="Uxo-yn-TCT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eVQ-gf-jIz" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="F2k-Lq-jxm">
+                <panGestureRecognizer delaysTouchesEnded="NO" minimumNumberOfTouches="1" id="F2k-Lq-jxm">
                     <connections>
                         <action selector="handlePanGesture:" destination="dS9-yh-DjW" id="lMZ-OS-6ox"/>
                         <outlet property="delegate" destination="dS9-yh-DjW" id="J4w-O3-DMc"/>
                     </connections>
                 </panGestureRecognizer>
-                <tapGestureRecognizer numberOfTapsRequired="2" id="aSg-Jq-9bM">
+                <tapGestureRecognizer delaysTouchesEnded="NO" numberOfTapsRequired="2" id="aSg-Jq-9bM">
                     <connections>
                         <action selector="handleDoubleTapGesture:" destination="dS9-yh-DjW" id="G9d-GQ-2v7"/>
                         <outlet property="delegate" destination="dS9-yh-DjW" id="4kU-Ts-887"/>
                     </connections>
                 </tapGestureRecognizer>
-                <tapGestureRecognizer id="Skt-6v-sCX">
+                <tapGestureRecognizer delaysTouchesEnded="NO" id="Skt-6v-sCX">
                     <connections>
                         <action selector="handleTapGesture:" destination="dS9-yh-DjW" id="dqW-tj-LxF"/>
                         <outlet property="delegate" destination="dS9-yh-DjW" id="CWn-Wt-4Lg"/>

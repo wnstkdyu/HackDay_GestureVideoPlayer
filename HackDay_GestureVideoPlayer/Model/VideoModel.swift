@@ -50,7 +50,7 @@ class VideoModel: NSObject {
         downloadTask = downloadSession.makeAssetDownloadTask(asset: asset,
                                                              assetTitle: " ",
                                                              assetArtworkData: nil,
-                                                             options: [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: minimumBitrate])
+                                                             options: nil)
         
         downloadTask?.resume()
     }

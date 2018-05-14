@@ -13,7 +13,6 @@ import MediaPlayer
 
 class PlayerViewController: UIViewController {
     
-    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var playerView: PlayerView!
     @IBOutlet weak var mediaSelectionTableView: UITableView!
     
@@ -42,7 +41,7 @@ class PlayerViewController: UIViewController {
     }
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return [.landscape]
+        return [.landscapeLeft]
     }
     
     // MARK: LifeCycle Methods
@@ -56,6 +55,17 @@ class PlayerViewController: UIViewController {
         super.viewDidAppear(animated)
         
         setPlayerUI()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        let portraitOrientation = UIDeviceOrientation.portrait.rawValue
+        UIDevice.current.setValue(portraitOrientation, forKey: "orientation")
+    }
+    
+    override func prefersHomeIndicatorAutoHidden() -> Bool {
+        return true
     }
     
     // MARK: Setup Methods
@@ -79,7 +89,7 @@ class PlayerViewController: UIViewController {
     }
     
     private func setPlayerUI() {
-        playerManager?.playerLayer.frame = playerView.frame
+        playerManager?.playerLayer.frame = playerView.bounds
         
         guard let asset = playerManager?.asset else { return }
         playerView.setPlayerUI(asset: asset)
@@ -132,10 +142,11 @@ class PlayerViewController: UIViewController {
     }
     
     @IBAction func handleDoubleTapGesture(_ sender: UITapGestureRecognizer) {
-        if scrollView.zoomScale == 1.0 {
-            scrollView.setZoomScale(1.5, animated: true)
+        guard let videoGravity = playerManager?.playerLayer.videoGravity else { return }
+        if videoGravity == .resizeAspect {
+            playerManager?.playerLayer.videoGravity = .resizeAspectFill
         } else {
-            scrollView.setZoomScale(1.0, animated: true)
+            playerManager?.playerLayer.videoGravity = .resizeAspect
         }
     }
     
@@ -377,13 +388,6 @@ extension PlayerViewController: UIGestureRecognizerDelegate {
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
-    }
-}
-
-extension PlayerViewController: UIScrollViewDelegate {
-    // MARK: UIScrollViewDelegate Methods
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return playerView
     }
 }
 

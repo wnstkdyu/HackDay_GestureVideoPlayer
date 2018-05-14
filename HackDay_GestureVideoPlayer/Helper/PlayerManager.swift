@@ -89,7 +89,7 @@ class PlayerManager: NSObject {
         
         // Player와 PlayerLayer 준비
         player.replaceCurrentItem(with: playerItem)
-        playerLayer.videoGravity = .resizeAspectFill
+        playerLayer.videoGravity = .resizeAspect
         
         addPeriodicTimeObserver()
     }
