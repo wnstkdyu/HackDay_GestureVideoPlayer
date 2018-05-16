@@ -15,7 +15,6 @@ class VideoModel: NSObject {
     public var title: String {
         return remoteURL.lastPathComponent
     }
-    
     public let remoteURL: URL
     public var localURL: URL?
     public var asset: AVURLAsset
@@ -23,8 +22,6 @@ class VideoModel: NSObject {
     
     // MARK: Private Properties
     private var downloadTask: AVAssetDownloadTask?
-    
-    private let minimumBitrate: Int = 2000000
     
     init(remoteURL: URL) {
         self.remoteURL = remoteURL
@@ -55,6 +52,11 @@ class VideoModel: NSObject {
         downloadTask?.resume()
     }
     
+//    private func getPropertiesAsynchronously() {
+//        let keys: [String] = ["duration", "playable", "tracks", "availableMediaCharacteristicsWithMediaSelectionOptions"]
+//        asset.loadValuesAsynchronously(forKeys: <#T##[String]#>, completionHandler: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
+//    }
+    
     private func getThumbnailImage() {
         // 썸네일 이미지가 있는지 먼저 확인
         guard !asset.tracks(withMediaCharacteristic: .visual).isEmpty else { return }
@@ -68,6 +70,5 @@ class VideoModel: NSObject {
             
             NotificationCenter.default.post(name: NotificationName.didReceiveThumbnailImage, object: nil)
         }
-        
     }
 }

@@ -64,6 +64,7 @@ class PlayerManager: NSObject {
             switch playerItemStatus {
             case .readyToPlay:
                 guard isFirstPlaying else { return }
+                player.currentItem?.preferredPeakBitRate = 0
                 
                 delegate?.isPlayedFirst()
                 isFirstPlaying = false
@@ -86,8 +87,12 @@ class PlayerManager: NSObject {
                                options: [.old, .new],
                                context: &playerItemContext)
         NotificationCenter.default.addObserver(self, selector: #selector(didReceivePlayerItmeEnded), name: Notification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+        // 처음에 제한을 두고 재생시작하면 풀기
+        playerItem.preferredPeakBitRate = 2000
         
         // Player와 PlayerLayer 준비
+        // replaceCurrentItem(with:)으로 하면 playback이 더 빨리 세팅됨.
+        // https://developer.apple.com/videos/play/wwdc2016/503/
         player.replaceCurrentItem(with: playerItem)
         playerLayer.videoGravity = .resizeAspect
         

@@ -51,8 +51,8 @@ class PlayerViewController: UIViewController {
         setUp()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         setPlayerUI()
     }
@@ -135,9 +135,19 @@ class PlayerViewController: UIViewController {
         
         switch uiVisibleState {
         case .appeared, .appearing:
-            playerView.fadeOutUI(isLocked: isLocked)
+            if isLocked {
+                playerView.fadeOutLockButton()
+            } else {
+                playerView.fadeOutUI(isLocked: isLocked)
+                playerView.fadeOutLockButton()
+            }
         case .disappeared, .disappearing:
-            playerView.fadeInUI(isLocked: isLocked)
+            if isLocked {
+                playerView.fadeInLockButton()
+            } else {
+                playerView.fadeInUI(isLocked: isLocked)
+                playerView.fadeInLockButton()
+            }
         }
     }
     
@@ -267,7 +277,8 @@ extension PlayerViewController: PlayerManagerDelegate {
         playerView.showUI()
         playerManager?.play()
         
-        playerView.fadeOutUI()
+        playerView.fadeOutUI(isLocked: isLocked)
+        playerView.fadeOutLockButton()
     }
     
     func setTimeObserverValue(time: CMTime) {
@@ -362,14 +373,12 @@ extension PlayerViewController: PlayerViewDelegate {
         self.uiVisibleState = uiVisibleState
     }
     
-    func checkLockButton() {
-        playerView.fadeOutUI(isLocked: isLocked)
-    }
-    
     func setLock(isLocked: Bool) {
         self.isLocked = isLocked
         
         playerView.cancelAllAnimations()
+        playerView.lockButton.isHidden = false
+        playerView.setLockTimer()
     }
 }
 

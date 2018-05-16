@@ -211,7 +211,6 @@
                                     <outlet property="totalTimeLabel" destination="FQX-A4-sZs" id="Kpg-gD-UJ7"/>
                                     <outletCollection property="outletCollection" destination="Y9M-Yx-YEx" collectionClass="NSMutableArray" id="3VO-ii-89e"/>
                                     <outletCollection property="outletCollection" destination="fKa-fm-WWY" collectionClass="NSMutableArray" id="aRR-Xz-zlI"/>
-                                    <outletCollection property="outletCollection" destination="bvZ-iw-8On" collectionClass="NSMutableArray" id="Ls6-k8-afj"/>
                                     <outletCollection property="outletCollection" destination="TGh-xu-I58" collectionClass="NSMutableArray" id="Lov-zu-N8U"/>
                                     <outletCollection property="outletCollection" destination="LQL-j5-1pA" collectionClass="NSMutableArray" id="Nby-Sb-k4O"/>
                                     <outletCollection property="outletCollection" destination="7nt-Ff-rn0" collectionClass="NSMutableArray" id="t6U-vB-3Lk"/>
